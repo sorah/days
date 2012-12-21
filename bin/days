@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+# vim: ft=ruby
+require 'days/command'
+
+Days::Command.start

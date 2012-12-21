@@ -1,0 +1,31 @@
+defaults: &defaults
+  base_path: "/"
+  permalink: "/%year%/%month%/%slug%"
+
+development:
+  <<: *defaults
+  database:
+    adapter: sqlite3
+    database: db/development.sqlite3
+    pool: 5
+    timeout: 5000
+
+test:
+  <<: *defaults
+  database:
+    adapter: sqlite3
+    database: db/test.sqlite3
+    pool: 5
+    timeout: 5000
+
+production:
+  <<: *defaults
+  database:
+    adapter: mysql2
+    encoding: utf8
+    database: days_production
+    pool: 5
+    username: foo
+    password: bar
+    socket: /tmp/mysql.sock
+

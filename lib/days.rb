@@ -1,5 +1,5 @@
 require "days/version"
+require "days/app"
 
 module Days
-  # Your code goes here...
 end

@@ -18,7 +18,21 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "sinatra"
+  gem.add_dependency "thor"
+
+  gem.add_dependency "settingslogic"
+
   gem.add_dependency "sprockets"
   gem.add_dependency "haml"
-  gem.add_dependency "scss"
+  gem.add_dependency "sass"
+
+  gem.add_dependency "activerecord"
+  gem.add_dependency "bcrypt-ruby"
+
+  gem.add_development_dependency "sqlite3"
+
+  gem.add_development_dependency "rspec"
+  gem.add_development_dependency "rack-test"
+
+  gem.add_development_dependency "pry"
 end
