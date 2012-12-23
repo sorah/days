@@ -15,6 +15,12 @@ module Days
         else
           self[:root] = "."
         end
+
+        self['database'].tap do |hash|
+          if hash['adapter'] == 'sqlite3' && /^\// !~ hash['database']
+            hash['database'] = File.join(self.root, hash['database'])
+          end
+        end
       end
     end
 
