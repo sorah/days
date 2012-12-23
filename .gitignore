@@ -18,3 +18,5 @@ tmp
 /dev/
 /sandbox/
 .DS_Store
+schema.rb
+*.sqlite3
