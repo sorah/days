@@ -2,6 +2,7 @@ require 'thor'
 require 'fileutils'
 require_relative 'config'
 require_relative 'app'
+require_relative 'migrator'
 
 module Days
   class Command < Thor
@@ -45,26 +46,7 @@ module Days
     method_option :verbose, :type => :boolean, :aliases => "-V", :default => true
     def migrate(env = "development")
       set_env env
-      require 'active_record'
-      require 'active_support/core_ext/class/attribute_accessors.rb'
-      require 'active_record/schema_dumper'
-
-      config.establish_db_connection()
-      ActiveRecord::Base.logger = nil
-      ActiveRecord::Migration.verbose = options[:verbose]
-
-      migration_paths = [
-        config[:migration_path] || "#{config.root}/db/migrate",
-        File.expand_path(File.join(__FILE__, '..', 'migrate'))
-      ]
-      ActiveRecord::Migrator.migrate(migration_paths, options[:version]) do |migration|
-        options[:scope].blank? || (options[:scope] == migration.scope)
-      end
-
-      schema_file = config[:schema] || "#{config.root}/db/schema.rb"
-      File.open(schema_file, "w:utf-8") do |io|
-        ActiveRecord::SchemaDumper.dump ActiveRecord::Base.connection, io
-      end
+      Days::Migrator.start(config, options)
     end
 
     private
