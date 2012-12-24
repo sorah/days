@@ -78,6 +78,13 @@ RSpec.configure do |config|
     ActiveRecord::Base.configurations = {'test' => Hash[config.days_config.database]}
   end
 
+  config.before(:each) do
+    unless self.example.metadata[:render]
+      Days::App.any_instance.stub(render: "")
+      Days::App.class_eval { private :render }
+    end
+  end
+
   config.include AppSpecHelper, type: :controller
   config.include FixturesAdapter
 
