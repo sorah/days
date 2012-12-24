@@ -1,2 +1,3 @@
-hello:
-  name: "hello"
+blogger:
+  name: "blogger"
+  login_name: "admin"
