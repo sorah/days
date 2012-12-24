@@ -49,6 +49,16 @@ module Days
       Days::Migrator.start(config, options)
     end
 
+    desc "console [ENV]", "Start console using pry (default = development)"
+    method_option :config, :type => :string, :aliases => "-c"
+    def console(env = "development")
+      set_env env
+      require 'pry'
+      require_relative 'models'
+      config.establish_db_connection()
+      Pry.start(binding)
+    end
+
     private
 
     def set_env(env = nil)
