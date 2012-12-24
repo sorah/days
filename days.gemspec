@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "haml"
   gem.add_dependency "sass"
 
-  gem.add_dependency "activerecord"
+  gem.add_dependency "activerecord", "~> 3.2.9"
   gem.add_dependency "bcrypt-ruby"
 
   gem.add_development_dependency "sqlite3"
