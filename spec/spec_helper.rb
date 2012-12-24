@@ -15,6 +15,10 @@ module AppSpecHelper
     ::Days::App.rack
   end
 
+  def response
+    last_response
+  end
+
   def self.included(k)
     k.module_eval do
       before(:all) do
