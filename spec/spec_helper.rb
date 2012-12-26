@@ -1,3 +1,4 @@
+ENV["RACK_ENV"] ||= 'test'
 require 'days'
 require 'days/migrator'
 require 'rack/test'
