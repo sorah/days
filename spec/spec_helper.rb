@@ -29,7 +29,7 @@ module AppSpecHelper
   end
 
   def last_render
-    @renders[last]
+    @renders.last
   end
 
   def login(user)
