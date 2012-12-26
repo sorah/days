@@ -21,14 +21,45 @@ module Days
     })
 
     set(:config, nil)
+    set :method_override, true
+
+    configure :production, :development do
+      enable :sessions
+    end
+
+    helpers do
+      def logged_in?
+        !!session[:user_id]
+      end
+    end
+
+    set :admin_only do |_|
+      condition do
+        unless logged_in?
+          halt 401
+        end
+      end
+    end
 
     class << self
       alias environment_orig= environment=
       def environment=(x)
-        environment_orig = x
+        self.environment_orig = x
         Config.namespace x.to_s
+        x
+      end
+
+      alias config_orig= config=
+      def config=(x)
+        self.config_orig = x
+        self.set :session_secret, config['session_secret'] || 'jjiw-jewn-n2i9-nc1e_binding.pry-is-good'
         x
       end
     end
   end
 end
+
+Dir["#{File.dirname(__FILE__)}/app/**/*.rb"].each do |f|
+  require f
+end
+
