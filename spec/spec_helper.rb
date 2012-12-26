@@ -32,6 +32,10 @@ module AppSpecHelper
     @renders.last
   end
 
+  def render
+    subject; @renders.last
+  end
+
   def login(user)
     session.merge!(user_id: user.id)
     env
@@ -47,7 +51,6 @@ module AppSpecHelper
         @renders = []
         unless self.example.metadata[:render]
           Days::App.any_instance.stub(:render) do |*args, &block|
-            binding.pry
             @renders << {engine: args[0], data: args[1], options: args[2] || {}, locals: args[3] || {}, ivars: args[4] || {}}
             ""
           end
