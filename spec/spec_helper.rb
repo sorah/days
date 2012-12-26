@@ -19,10 +19,37 @@ module AppSpecHelper
     last_response
   end
 
+  def env
+    @env ||= {'rack.session' => session}
+  end
+
+  def session
+    @session ||= {}
+  end
+
+  def last_render
+    @renders[last]
+  end
+
+  def login(user)
+    session.merge!(user_id: user.id)
+    env
+  end
+
   def self.included(k)
     k.module_eval do
       before(:all) do
         Days::App.config = RSpec.configuration.days_config
+      end
+
+      before(:each) do
+        @renders = []
+        unless self.example.metadata[:render]
+          Days::App.any_instance.stub(:render) do |*args, &block|
+            @renders << {engine: args[0], data: args[1], options: args[2] || {}, locals: args[3] || {}}
+          end
+          Days::App.class_eval { private :render }
+        end
       end
     end
   end
@@ -76,17 +103,14 @@ RSpec.configure do |config|
     config.days_config.establish_db_connection()
     Days::Migrator.start(config.days_config, verbose: true)
     ActiveRecord::Base.configurations = {'test' => Hash[config.days_config.database]}
+    ActiveRecord::Base.logger = nil
   end
 
-  config.before(:each) do
-    unless self.example.metadata[:render]
-      Days::App.any_instance.stub(render: "")
-      Days::App.class_eval { private :render }
-    end
-  end
 
   config.include AppSpecHelper, type: :controller
   config.include FixturesAdapter
 
   config.tty = true
 end
+
+require_relative "./shared/admin"
