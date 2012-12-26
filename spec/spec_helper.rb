@@ -47,9 +47,17 @@ module AppSpecHelper
         @renders = []
         unless self.example.metadata[:render]
           Days::App.any_instance.stub(:render) do |*args, &block|
-            @renders << {engine: args[0], data: args[1], options: args[2] || {}, locals: args[3] || {}}
+            binding.pry
+            @renders << {engine: args[0], data: args[1], options: args[2] || {}, locals: args[3] || {}, ivars: args[4] || {}}
+            ""
           end
-          Days::App.class_eval { private :render }
+          Days::App.class_eval do
+            alias render_orig render
+            def render(*args)
+              render_orig *args, Hash[self.instance_variables.map{ |k| [k, instance_variable_get(k)] }]
+            end
+            private :render, :render_orig
+          end
         end
       end
     end
