@@ -13,13 +13,13 @@ describe Days::App, type: :controller do
 
       it_behaves_like 'an admin page'
 
-      it { should be_success }
+      it { should be_ok }
 
       it "lists up entries" do
         render[:data].should == 'admin/entries/index'
 
         entries = render[:ivars][:@entries]
-        entries.should == Entry.all
+        entries.should == Days::Entry.all
       end
     end
 
@@ -28,19 +28,19 @@ describe Days::App, type: :controller do
 
       it_behaves_like 'an admin page'
 
-      it { should be_success }
+      it { should be_ok }
 
       it "renders form page" do
         render[:data].should == 'admin/entries/form'
         entry = render[:ivars][:@entry]
         entry.should be_a(Days::Entry)
-        entry.should be_new
+        entry.should be_new_record
       end
     end
 
-    describe "POST /admin/entries/create" do
-      subject { post '/admin/entries/create', params, env }
-      subject(:entry) { Entry.last }
+    describe "POST /admin/entries" do
+      subject { post '/admin/entries', params, env }
+      let(:entry) { Days::Entry.last }
       let(:entry_params) { {title: "Hello", body: "World"} }
       let(:params) { {entry: entry_params} }
 
@@ -56,7 +56,7 @@ describe Days::App, type: :controller do
 
       context "when entry is invalid" do
         before do
-          Entry.any_instance.stub(:valid? => false, :save => false)
+          Days::Entry.any_instance.stub(:valid? => false, :save => false)
         end
 
         specify { subject.status.should == 406 } # not acceptable
@@ -72,32 +72,34 @@ describe Days::App, type: :controller do
 
       context "with category" do
         let(:categories) do
-          Hash[Category.pluck(:id).map{ |_| [_, '1'] }]
+          Hash[Days::Category.pluck(:id).map{ |_| [_, '1'] }]
         end
 
         let(:params) do
           {entry: entry_params.merge(categories: categories)}
         end
 
+        it { should be_redirect }
+
         it "creates entry with categories" do
-          subject.should be_success
-          entry.categories.reload.pluck(:id).should == Category.pluck(:id)
+          subject
+          entry.categories.reload.map(&:id).should == Days::Category.pluck(:id)
         end
       end
     end
 
     describe "GET /admin/entries/:id" do
-      subject { post "/admin/entries/#{entry.id}", {}, env }
+      subject { get "/admin/entries/#{entry.id}", {}, env }
 
       it_behaves_like 'an admin page'
 
       it "renders form page" do
         render[:data].should == 'admin/entries/form'
-        render[:ivars][:@entry].should == entry.id
+        render[:ivars][:@entry].should == entry
       end
 
       context "with invalid entry" do
-        let(:entry) { double.tap { |_| _.stub(id: Entry.last.id.succ) } }
+        let(:entry) { double.tap { |_| _.stub(id: Days::Entry.last.id.succ) } }
 
         it { should be_not_found }
       end
@@ -113,7 +115,7 @@ describe Days::App, type: :controller do
 
       it "updates entry" do
         subject.should be_redirect
-        subject['Location'].should == path
+        URI.parse(subject['Location']).path.should == path
 
         entry.reload
         entry.title.should == 'New'
@@ -122,7 +124,7 @@ describe Days::App, type: :controller do
 
       context "when invalid" do
         before do
-          Entry.any_instance.stub(:valid? => false, :save => false)
+          Days::Entry.any_instance.stub(:valid? => false, :save => false)
         end
 
         it "renders form" do
@@ -136,17 +138,17 @@ describe Days::App, type: :controller do
 
       context "with category" do
         let(:params) do
-          {entry: entry_params.merge(categories: {categories(:rainy).id.to_s => '1'})}
+          {entry: {categories: {categories(:rainy).id.to_s => '1'}}}
         end
 
         it "creates entry with categories" do
-          subject.should be_success
-          entry.categories.reload.pluck(:id).should == [categories(:rainy).id]
+          subject.should be_redirect
+          entry.categories.reload.map(&:id).should == [categories(:rainy).id]
         end
       end
 
       context "with invalid entry" do
-        let(:entry) { double.tap { |_| _.stub(id: Entry.last.id.succ) } }
+        let(:entry) { double.tap { |_| _.stub(id: Days::Entry.last.id.succ) } }
 
         it { should be_not_found }
       end
@@ -158,13 +160,13 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "destroys entry" do
-        expect { subject }.to change { Entry.where(id: entry.id).count }.from(1).to(0)
+        expect { subject }.to change { Days::Entry.where(id: entry.id).count }.from(1).to(0)
         subject.should be_redirect
-        subject['Location'].should == "/admin/entries"
+        URI.parse(subject.location).path.should == "/admin/entries"
       end
 
       context "with invalid entry" do
-        let(:entry) { double.tap { |_| _.stub(id: Entry.last.id.succ) } }
+        let(:entry) { double.tap { |_| _.stub(id: Days::Entry.last.id.succ) } }
 
         it { should be_not_found }
       end
