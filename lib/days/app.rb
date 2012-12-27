@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sprockets'
 require_relative 'config'
+require_relative 'models'
 
 module Days
   class App < Sinatra::Base
@@ -27,9 +28,19 @@ module Days
       enable :sessions
     end
 
+    configure :test do
+      set :raise_errors, true
+      set :dump_errors, false
+      set :show_exceptions, false
+    end
+
     helpers do
       def logged_in?
         !!session[:user_id]
+      end
+
+      def current_user
+        @current_user ||= session[:user_id] ? User.where(session[:user_id]).first : nil
       end
     end
 
