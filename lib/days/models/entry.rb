@@ -1,6 +1,8 @@
 require 'active_record'
 
-class Entry < ActiveRecord::Base
-  belongs_to :user
-  has_and_belongs_to_many :categories
+module Days
+  class Entry < ActiveRecord::Base
+    belongs_to :user, class_name: 'Days::User'
+    has_and_belongs_to_many :categories, class_name: 'Days::Category'
+  end
 end

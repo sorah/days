@@ -1,5 +1,6 @@
 ENV["RACK_ENV"] ||= 'test'
 require 'days'
+require 'days/models'
 require 'days/migrator'
 require 'rack/test'
 require 'active_record'
@@ -97,6 +98,10 @@ module FixturesAdapter
     self.fixture_path = "#{File.dirname(__FILE__)}/fixtures"
     self.use_transactional_fixtures = false
     self.use_instantiated_fixtures  = true
+
+    self.fixture_class_names = Hash.new do |h, table_name|
+        h[table_name] = "Days::#{ActiveRecord::Fixtures.find_table_name(table_name)}"
+    end
   end
 end
 

@@ -1,7 +1,9 @@
 require 'active_record'
 
-class User < ActiveRecord::Base
-  has_secure_password
+module Days
+  class User < ActiveRecord::Base
+    has_secure_password
 
-  has_many :entries
+    has_many :entries, class_name: 'Days::Entry'
+  end
 end
