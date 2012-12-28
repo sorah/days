@@ -52,6 +52,14 @@ module Days
       end
     end
 
+    set :setup_only do |_|
+      condition do
+        if User.first
+          halt 403
+        end
+      end
+    end
+
     class << self
       alias environment_orig= environment=
       def environment=(x)
