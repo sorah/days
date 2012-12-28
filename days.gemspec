@@ -27,13 +27,17 @@ Gem::Specification.new do |gem|
   gem.add_dependency "haml"
   gem.add_dependency "sass"
 
+  gem.add_dependency "redcarpet"
+
   gem.add_dependency "activerecord", "~> 3.2.9"
+  gem.add_dependency "stringex"
   gem.add_dependency "bcrypt-ruby"
 
   gem.add_development_dependency "sqlite3"
 
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "rack-test"
+  gem.add_development_dependency "fuubar"
 
   gem.add_development_dependency "pry"
   gem.add_development_dependency "pry-nav"
