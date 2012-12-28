@@ -2,6 +2,7 @@ entry_one:
   title: "Today was"
   body: "a rainy day"
   rendered: "<p>a rainy day</p>"
+  slug: "today-is-a-rainy-day"
   published_at: 2012-11-15 00:00:00
   user: blogger
   categories: daily, rainy
@@ -10,6 +11,7 @@ entry_two:
   title: "Today was"
   body: "a beautiful day"
   rendered: "<p>a beautiful day</p>"
+  slug: "today-is-a-beautiful-day"
   published_at: 2012-12-25 00:00:00
   user: blogger
   categories: daily
