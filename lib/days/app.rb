@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sprockets'
+require 'rack/csrf'
 require_relative 'config'
 require_relative 'models'
 
@@ -13,6 +14,7 @@ module Days
     set(:rack, Rack::Builder.app {
       app = ::Days::App
       map '/' do
+        use Rack::Csrf if app.environment != :test
         run app
       end
 

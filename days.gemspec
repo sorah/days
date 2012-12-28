@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "sinatra"
   gem.add_dependency "thor"
+  gem.add_dependency "rack_csrf"
 
   gem.add_dependency "settingslogic"
 
