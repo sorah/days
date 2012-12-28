@@ -9,6 +9,15 @@ describe Days::App, type: :controller do
       )
     end
 
+    before do
+      Days::User.destroy_all
+      user
+    end
+
+    after do
+      user.destroy
+    end
+
     describe "GET /admin/login" do
       subject { get '/admin/login' }
 
