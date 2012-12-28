@@ -32,7 +32,7 @@ describe Days::App, type: :controller do
       it "creates category" do
         subject.should be_redirect
 
-        Category.last.name.should == params[:category][:name]
+        Days::Category.last.name.should == params[:category][:name]
       end
 
       context "when category is invalid" do
