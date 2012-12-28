@@ -47,7 +47,8 @@ module Days
     set :admin_only do |_|
       condition do
         unless logged_in?
-          halt 401
+          # TODO: return-path param
+          redirect '/admin/login'
         end
       end
     end
