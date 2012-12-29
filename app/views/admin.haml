@@ -29,4 +29,4 @@
           %form.navbar-form.pull-right{action: "/admin/logout", method: "POST"}
             != csrf_tag
             %button.btn.btn-link{type: 'submit'} Log out
-    = yield
+    != yield
