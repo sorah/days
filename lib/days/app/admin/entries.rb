@@ -20,9 +20,11 @@ module Days
         end
         @entry = Entry.new(entry)
         @entry.user = current_user
+
         unless @entry.published_at
           @entry.published_at = Time.now
         end
+
         if @entry.save
           redirect "/admin/entries/#{@entry.id}" # FIXME: Permalink
         else
