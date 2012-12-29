@@ -3,6 +3,8 @@ require 'sprockets'
 require 'rack/csrf'
 require_relative 'config'
 require_relative 'models'
+require 'haml'
+require 'sass'
 
 module Days
   class App < Sinatra::Base
