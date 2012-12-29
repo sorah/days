@@ -47,9 +47,13 @@ module Days
 
     delete "/admin/users/:id", :admin_only => true do
       @user = User.where(id: params[:id]).first || halt(404)
-      @user.destroy
 
-      redirect "/admin/users"
+      if @user == current_user
+        halt 400
+      else
+        @user.destroy
+        redirect "/admin/users"
+      end
     end
   end
 end

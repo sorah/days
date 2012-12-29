@@ -129,18 +129,32 @@ describe Days::App, type: :controller do
     end
 
     describe "DELETE /admin/users/:id" do
-      subject { delete "/admin/users/#{user.id}", {}, env }
+      let(:another_user) { users(:writer) }
+      subject { delete "/admin/users/#{another_user.id}", {}, env }
 
       it_behaves_like 'an admin page'
 
       it "destroys user" do
-        expect { subject }.to change { Days::User.where(id: user.id).count }.from(1).to(0)
+        expect { subject }.to change { Days::User.count }.by(-1)
+        Days::User.where(id: another_user.id).count.should be_zero
+
         subject.should be_redirect
         URI.parse(subject.location).path.should == "/admin/users"
       end
 
+      context "when tried to delete myself" do
+        subject { delete "/admin/users/#{user.id}", {}, env }
+
+        it "doesn't destroy" do
+          expect { subject }.to_not change { Days::User.count }
+
+          subject.status.should == 400
+        end
+      end
+
       context "with invalid user" do
-        let(:user) { double.tap { |_| _.stub(id: Days::User.last.id.succ) } }
+        subject { delete "/admin/users/#{user.id}", {}, env }
+        let(:user) { users(:blogger).tap(&:destroy) }
 
         it { should be_not_found }
       end

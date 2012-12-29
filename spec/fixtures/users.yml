@@ -1,3 +1,6 @@
 blogger:
   name: "blogger"
   login_name: "admin"
+writer:
+  name: "writer"
+  login_name: "john"
