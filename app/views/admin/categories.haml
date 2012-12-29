@@ -1,0 +1,45 @@
+.container
+  %h1 Categories
+
+  %table.table.table-hover#categories
+    %thead
+      %tr
+        %th Name
+        %th Actions
+    %tbody
+      - @categories.each do |category|
+        %tr.category
+          %td.name= category.name
+          %td.form{style: 'display: none;'}
+            %form.form-inline.inlm{action: "/admin/categories/#{category.id}", method: 'POST'}
+              != csrf_tag
+              %input{type: 'hidden', name: '_method', value: 'PUT'}
+              %input.input-small{type: 'text', name: 'category[name]', placeholder: 'Name', value: category.name}
+              %button.btn.btn-small.btn-primary{type: 'submit'} Save
+              %button.btn.btn-small.cancel Cancel
+          %td
+            %form.form-inline.inlm{action: "/admin/categories/#{category.id}", method: "POST"}
+              != csrf_tag
+              %input{type: 'hidden', name: '_method', value: 'DELETE'}
+              %button.btn.btn-small.btn-danger{type: 'submit'} Delete
+            %button.btn.btn-small.category-edit Edit
+  %form.form-inline{action: '/admin/categories', method: 'POST'}
+    != csrf_tag
+    %input.input-small{type: 'text', name: 'category[name]', placeholder: 'Name'}
+    %button.btn.btn-primary{type: 'submit'} Add
+
+:javascript
+  jQuery(function($){
+    $("#categories tr.category").each(function() {
+      var row = $(this);
+      row.find(".category-edit").click(function() {
+        row.find(".name").hide();
+        row.find(".form").show();
+        row.find(".form input").focus();
+      });
+      row.find(".cancel").click(function() {
+        row.find(".name").show();
+        row.find(".form").hide();
+      });
+    });
+  })
