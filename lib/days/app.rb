@@ -20,6 +20,8 @@ module Days
     def self.rack
       Rack::Builder.app {
         app = ::Days::App
+        use ActiveRecord::ConnectionAdapters::ConnectionManagement
+
         map '/' do
           if app.environment != 'test'
             use Rack::Session::Cookie
