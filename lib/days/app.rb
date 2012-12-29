@@ -7,8 +7,9 @@ require_relative 'models'
 module Days
   class App < Sinatra::Base
     set(:sprockets, Sprockets::Environment.new.tap { |env|
-      # env.append_path "#{root}/javascripts"
-      # env.append_path "#{root}/stylesheets"
+      env.append_path "#{self.root}/app/javascripts"
+      env.append_path "#{self.root}/app/stylesheets"
+      env.append_path "#{self.root}/app/images"
     })
 
     set(:rack, Rack::Builder.app {
@@ -75,6 +76,14 @@ module Days
       def config=(x)
         self.config_orig = x
         self.set :session_secret, config['session_secret'] || 'jjiw-jewn-n2i9-nc1e_binding.pry-is-good'
+        self.set(:sprockets, Sprockets::Environment.new.tap { |env|
+          env.append_path "#{config.root}/javascripts"
+          env.append_path "#{config.root}/stylesheets"
+          env.append_path "#{config.root}/images"
+          env.append_path "#{self.root}/app/javascripts"
+          env.append_path "#{self.root}/app/stylesheets"
+          env.append_path "#{self.root}/app/images"
+        })
         x
       end
     end
