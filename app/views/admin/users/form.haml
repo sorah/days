@@ -1,0 +1,25 @@
+.container
+  - if @user.new_record?
+    %h1 New User
+  - else
+    %h1 Editing User
+
+  - action = @user.new_record? ? "/admin/users" : "/admin/users/#{@user.id}"
+  %form.form{action: action, method: "POST"}
+    != csrf_tag
+    - unless @user.new_record?
+      %input{type: 'hidden', name: '_method', value: "PUT"}
+    %p
+      %label{for: "user_name"} Name
+      %input#user_login_name{type: 'text', name: 'user[name]', placeholder: "John Doe", value: @user.name}
+    %p
+      %label{for: "user_login_name"} Login Name
+      %input#user_login_name{type: 'text', name: 'user[login_name]', placeholder: "john_doe", value: @user.login_name}
+    %p
+      %label{for: "user_password"} Password
+      %input#user_password{type: 'password', name: 'user[password]', placeholder: "Password..."}
+      %input{type: 'password', name: 'user[password_confirmation]', placeholder: "Confirm"}
+    %button.btn.btn-large.btn-primary{type: 'submit'} Save
+
+
+

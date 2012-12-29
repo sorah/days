@@ -1,0 +1,23 @@
+.container
+  %h1 Users
+
+  %nav
+    %a.btn.btn-primary{href: '/admin/users/new'} Add User
+
+  %table.table.table-hover
+    %thead
+      %tr
+        %th Name
+        %th Login Name
+        %th Actions
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= user.name
+          %td= user.login_name
+          %td
+            %a.btn.btn-small{href: "/admin/users/#{user.id}"} Edit
+            %form.form-inline.inlm{action: "/admin/users/#{user.id}", method: "POST"}
+              != csrf_tag
+              %input{type: 'hidden', name: '_method', value: 'DELETE'}
+              %button.btn.btn-small.btn-danger{type: 'submit'} Delete
