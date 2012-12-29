@@ -52,7 +52,7 @@ module Days
       end
 
       def current_user
-        @current_user ||= session[:user_id] ? User.where(session[:user_id]).first : nil
+        @current_user ||= session[:user_id] ? User.where(id: session[:user_id]).first : nil
       end
 
       def csrf_token
