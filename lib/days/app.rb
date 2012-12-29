@@ -21,13 +21,14 @@ module Days
       Rack::Builder.app {
         app = ::Days::App
         map '/' do
-          if app.environment != :test
+          if app.environment != 'test'
             use Rack::Session::Cookie
             use Rack::Csrf
           end
-          if app.environment == :development
+          if app.environment == 'development'
             app.dump_errors = true
             app.show_exceptions = true
+            app.reload_templates = true
           end
           run app
         end
