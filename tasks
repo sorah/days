@@ -1,0 +1,5 @@
+* Ugly establish on App.config =
+* Show validation errors
+  * /admin/users
+  * /admin/categories
+  * /admin/entries
