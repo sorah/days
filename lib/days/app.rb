@@ -42,6 +42,8 @@ module Days
     set(:config, nil)
     set :method_override, true
 
+    set :haml, :escape_html => true
+
     helpers do
       def logged_in?
         !!session[:user_id]
