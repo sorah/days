@@ -19,7 +19,14 @@ module Days
     set(:rack, Rack::Builder.app {
       app = ::Days::App
       map '/' do
-        use Rack::Csrf if app.environment != :test
+        if app.environment != :test
+          use Rack::Session::Cookie
+          use Rack::Csrf
+        end
+        if app.environment == :development
+          app.dump_errors = true
+          app.show_exceptions = true
+        end
         run app
       end
 
@@ -30,16 +37,6 @@ module Days
 
     set(:config, nil)
     set :method_override, true
-
-    configure :production, :development do
-      enable :sessions
-    end
-
-    configure :test do
-      set :raise_errors, true
-      set :dump_errors, false
-      set :show_exceptions, false
-    end
 
     helpers do
       def logged_in?
