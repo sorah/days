@@ -31,6 +31,10 @@ module Days
       user = params[:user] || halt(400)
       @user = User.where(id: params[:id]).first || halt(404)
 
+      if user[:password] == ""
+        user.delete :password
+      end
+
       @user.update_attributes(user)
 
       if @user.save
