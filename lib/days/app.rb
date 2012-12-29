@@ -52,6 +52,14 @@ module Days
       def current_user
         @current_user ||= session[:user_id] ? User.where(session[:user_id]).first : nil
       end
+
+      def csrf_token
+        Rack::Csrf.csrf_token(env)
+      end
+
+      def csrf_tag
+        Rack::Csrf.csrf_tag(env)
+      end
     end
 
     set :admin_only do |_|
