@@ -7,10 +7,12 @@ require_relative 'models'
 module Days
   class App < Sinatra::Base
     set(:sprockets, Sprockets::Environment.new.tap { |env|
-      env.append_path "#{self.root}/app/javascripts"
-      env.append_path "#{self.root}/app/stylesheets"
-      env.append_path "#{self.root}/app/images"
+      env.append_path "#{self.root}/javascripts"
+      env.append_path "#{self.root}/stylesheets"
+      env.append_path "#{self.root}/images"
     })
+
+    set :root, File.expand_path(File.join(__FILE__, '..', '..', '..', 'app'))
 
     set(:rack, Rack::Builder.app {
       app = ::Days::App
@@ -80,9 +82,9 @@ module Days
           env.append_path "#{config.root}/javascripts"
           env.append_path "#{config.root}/stylesheets"
           env.append_path "#{config.root}/images"
-          env.append_path "#{self.root}/app/javascripts"
-          env.append_path "#{self.root}/app/stylesheets"
-          env.append_path "#{self.root}/app/images"
+          env.append_path "#{self.root}/javascripts"
+          env.append_path "#{self.root}/stylesheets"
+          env.append_path "#{self.root}/images"
         })
         x
       end
