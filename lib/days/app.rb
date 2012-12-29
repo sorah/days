@@ -65,6 +65,13 @@ module Days
       end
     end
 
+    alias find_template_orig find_template
+    def find_template(views, name, engine, &block)
+      app_views = File.expand_path(settings.config['views'] || ::File.join(settings.config.root, "views"))
+      find_template_orig app_views, name, engine, &block
+      find_template_orig views, name, engine, &block
+    end
+
     class << self
       alias environment_orig= environment=
       def environment=(x)
