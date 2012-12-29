@@ -2,7 +2,7 @@ module Days
   class App < Sinatra::Base
     get "/admin/categories", :admin_only => true do
       @categories = Category.all
-      haml 'admin/categories'
+      haml :'admin/categories'
     end
 
     post "/admin/categories", :admin_only => true do
@@ -13,7 +13,7 @@ module Days
         redirect "/admin/categories"
       else
         status 406
-        haml 'admin/categories'
+        haml :'admin/categories'
       end
     end
 
@@ -27,7 +27,7 @@ module Days
         redirect "/admin/categories"
       else
         status 406
-        haml 'admin/categories'
+        haml :'admin/categories'
       end
     end
 

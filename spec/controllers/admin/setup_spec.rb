@@ -25,7 +25,7 @@ describe Days::App, type: :controller do
         it { should be_ok }
 
         it "renders form page" do
-          render[:data].should == 'admin/setup'
+          render[:data].should == :'admin/setup'
           user = render[:ivars][:@user]
           user.should be_a(Days::User)
           user.should be_new_record
@@ -72,7 +72,7 @@ describe Days::App, type: :controller do
           specify { subject.status.should == 406 } # not acceptable
 
           it "renders form" do
-            render[:data].should == 'admin/setup'
+            render[:data].should == :'admin/setup'
             iuser = render[:ivars][:@user]
             iuser.should be_a_new_record
             iuser.name.should == 'Newbie'

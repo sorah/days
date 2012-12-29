@@ -16,7 +16,7 @@ describe Days::App, type: :controller do
       it { should be_ok }
 
       it "lists up categories" do
-        render[:data].should == 'admin/categories'
+        render[:data].should == :'admin/categories'
 
         categories = render[:ivars][:@categories]
         categories.should == Days::Category.all
@@ -43,7 +43,7 @@ describe Days::App, type: :controller do
         specify { subject.status.should == 406 } # not acceptable
 
         it "renders form" do
-          render[:data].should == 'admin/categories'
+          render[:data].should == :'admin/categories'
         end
       end
     end
@@ -68,7 +68,7 @@ describe Days::App, type: :controller do
         end
 
         it "renders form" do
-          render[:data].should == 'admin/categories'
+          render[:data].should == :'admin/categories'
         end
       end
 

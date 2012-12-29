@@ -16,7 +16,7 @@ describe Days::App, type: :controller do
       it { should be_ok }
 
       it "lists up entries" do
-        render[:data].should == 'admin/entries/index'
+        render[:data].should == :'admin/entries/index'
 
         entries = render[:ivars][:@entries]
         entries.should == Days::Entry.all
@@ -31,7 +31,7 @@ describe Days::App, type: :controller do
       it { should be_ok }
 
       it "renders form page" do
-        render[:data].should == 'admin/entries/form'
+        render[:data].should == :'admin/entries/form'
         entry = render[:ivars][:@entry]
         entry.should be_a(Days::Entry)
         entry.should be_new_record
@@ -62,7 +62,7 @@ describe Days::App, type: :controller do
         specify { subject.status.should == 406 } # not acceptable
 
         it "renders form" do
-          render[:data].should == 'admin/entries/form'
+          render[:data].should == :'admin/entries/form'
           ientry = render[:ivars][:@entry]
           ientry.should be_a_new_record
           ientry.title.should == 'Hello'
@@ -94,7 +94,7 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "renders form page" do
-        render[:data].should == 'admin/entries/form'
+        render[:data].should == :'admin/entries/form'
         render[:ivars][:@entry].should == entry
       end
 
@@ -128,7 +128,7 @@ describe Days::App, type: :controller do
         end
 
         it "renders form" do
-          render[:data].should == 'admin/entries/form'
+          render[:data].should == :'admin/entries/form'
           ientry = render[:ivars][:@entry]
           ientry.id.should == entry.id
           ientry.title.should == 'New'

@@ -2,12 +2,12 @@ module Days
   class App < Sinatra::Base
     get "/admin/entries", :admin_only => true do
       @entries = Entry.all
-      haml 'admin/entries/index'
+      haml :'admin/entries/index'
     end
 
     get "/admin/entries/new", :admin_only => true do
       @entry = Entry.new
-      haml 'admin/entries/form'
+      haml :'admin/entries/form'
     end
 
     post "/admin/entries", :admin_only => true do
@@ -27,7 +27,7 @@ module Days
           redirect "/admin/entries/#{@entry.id}" # FIXME: Permalink
         else
           status 406
-          haml 'admin/entries/form'
+          haml :'admin/entries/form'
         end
       else
         halt 400
@@ -36,7 +36,7 @@ module Days
 
     get "/admin/entries/:id", :admin_only => true do
       @entry = Entry.where(id: params[:id]).first || halt(404)
-      haml 'admin/entries/form'
+      haml :'admin/entries/form'
     end
 
     put "/admin/entries/:id", :admin_only => true do
@@ -52,7 +52,7 @@ module Days
         redirect "/admin/entries/#{@entry.id}"
       else
         status 406
-        haml 'admin/entries/form'
+        haml :'admin/entries/form'
       end
     end
 

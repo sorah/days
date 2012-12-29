@@ -22,7 +22,7 @@ describe Days::App, type: :controller do
       subject { get '/admin/login' }
 
       it "renders login page" do
-        render[:data].should == 'admin/login'
+        render[:data].should == :'admin/login'
       end
     end
 
@@ -66,7 +66,7 @@ describe Days::App, type: :controller do
 
         it "returns login page" do
           subject.status.should == 401
-          render[:data].should == 'admin/login'
+          render[:data].should == :'admin/login'
         end
       end
 
@@ -80,7 +80,7 @@ describe Days::App, type: :controller do
 
         it "returns login page" do
           subject.status.should == 401
-          render[:data].should == 'admin/login'
+          render[:data].should == :'admin/login'
         end
       end
     end
