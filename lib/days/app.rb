@@ -8,32 +8,35 @@ require 'sass'
 
 module Days
   class App < Sinatra::Base
+    set :root, File.expand_path(File.join(__FILE__, '..', '..', '..', 'app'))
+
     set(:sprockets, Sprockets::Environment.new.tap { |env|
       env.append_path "#{self.root}/javascripts"
       env.append_path "#{self.root}/stylesheets"
       env.append_path "#{self.root}/images"
     })
 
-    set :root, File.expand_path(File.join(__FILE__, '..', '..', '..', 'app'))
 
-    set(:rack, Rack::Builder.app {
-      app = ::Days::App
-      map '/' do
-        if app.environment != :test
-          use Rack::Session::Cookie
-          use Rack::Csrf
+    def self.rack
+      Rack::Builder.app {
+        app = ::Days::App
+        map '/' do
+          if app.environment != :test
+            use Rack::Session::Cookie
+            use Rack::Csrf
+          end
+          if app.environment == :development
+            app.dump_errors = true
+            app.show_exceptions = true
+          end
+          run app
         end
-        if app.environment == :development
-          app.dump_errors = true
-          app.show_exceptions = true
-        end
-        run app
-      end
 
-      map '/assets' do
-        run app.sprockets
-      end
-    })
+        map '/assets' do
+          run app.sprockets
+        end
+      }
+    end
 
     set(:config, nil)
     set :method_override, true
