@@ -106,6 +106,7 @@ module Days
           env.append_path "#{self.root}/stylesheets"
           env.append_path "#{self.root}/images"
         })
+        config.establish_db_connection()
         x
       end
     end
