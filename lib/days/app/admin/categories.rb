@@ -13,6 +13,7 @@ module Days
         redirect "/admin/categories"
       else
         status 406
+        @categories = Category.all
         haml :'admin/categories', layout: :admin
       end
     end
@@ -27,6 +28,7 @@ module Days
         redirect "/admin/categories"
       else
         status 406
+        @categories = Category.all
         haml :'admin/categories', layout: :admin
       end
     end
