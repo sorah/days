@@ -1,0 +1,19 @@
+!!! 5
+%html
+  %head
+    %meta{charset: 'UTF-8'}
+    %script{src: '/assets/jquery-1.8.3.min.js'}
+    %script{src: '/assets/bootstrap.min.js'}
+    %link{href: '/assets/admin/login.css', rel: 'stylesheet'}
+    %link{href: "/assets/bootstrap.min.css", rel: "stylesheet", media: "screen"}
+    %title Login - Days Admin
+  %body
+    .container
+      %form.form-login{action: "/admin/login", method: "POST"}
+        %h2 Please log in
+        != csrf_tag
+        %input.input-block-level#login_name{type: 'text', name: "login_name", placeholder: "Login Name"}
+        %input.input-block-level{type: 'password', name: "password", placeholder: "Password"}
+        %button.btn.btn-large.btn-primary{type: 'submit'} Log in
+    :javascript
+      $(function() { $('#login_name').focus() })

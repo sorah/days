@@ -1,0 +1,32 @@
+!!! 5
+%html
+  %head
+    %meta{charset: 'UTF-8'}
+    %script{src: '/assets/jquery-1.8.3.min.js'}
+    %script{src: '/assets/bootstrap.min.js'}
+    %link{href: "/assets/bootstrap.min.css", rel: "stylesheet", media: "screen"}
+    %link{href: "/assets/admin.css", rel: "stylesheet", media: "screen"}
+    - if @title
+      %title #{@title} - Days Admin
+    - else
+      %title Days Admin
+  %body
+    .navbar.navbar-inverse.navbar-fixed-top
+      .navbar-inner
+        .container
+          %a.btn.btn-navbar{data: {toggle: 'collapse', target: '.nav-collapse'}}
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.brand{href: '/admin/'} Days
+          %ul.nav
+            %li
+              %a{href: '/admin/entries'} Entries
+            %li
+              %a{href: '/admin/categories'} Categories
+            %li
+              %a{href: '/admin/users'} Users
+          %form.navbar-form.pull-right{action: "/admin/logout", method: "POST"}
+            != csrf_tag
+            %button.btn.btn-link{type: 'submit'} Log out
+    = yield
