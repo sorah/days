@@ -46,6 +46,7 @@ module AppSpecHelper
     k.module_eval do
       before(:all) do
         Days::App.config = RSpec.configuration.days_config
+        ActiveRecord::Base.logger = nil
       end
 
       before(:each) do
