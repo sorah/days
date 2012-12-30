@@ -7,6 +7,8 @@ class CreateEntries < ActiveRecord::Migration
       t.datetime :published_at
       t.integer :user_id
       t.string :slug
+
+      t.timestamps
     end
 
     add_index :entries, :published_at
