@@ -1,0 +1,29 @@
+.container
+  %h1 Entries
+
+  %nav
+    %a.btn.btn-primary{href: '/admin/entries/new'} New Entry
+
+  %table.table.table-hover
+    %thead
+      %tr
+        %th Title
+        %th Published at
+        %th Actions
+    %tbody
+      - @entries.each do |entry|
+        %tr
+          %td= entry.title
+          %td
+            - if entry.published_at
+              = entry.published_at
+            - else
+              %span.label.label-info Draft
+            - if entry.scheduled?
+              %span.label.label-success Scheduled
+          %td
+            %a.btn.btn-small{href: "/admin/entries/#{entry.id}"} Edit
+            %form.form-inline.inlm{action: "/admin/entries/#{entry.id}", method: "POST"}
+              != csrf_tag
+              %input{type: 'hidden', name: '_method', value: 'DELETE'}
+              %button.btn.btn-small.btn-danger{type: 'submit'} Delete

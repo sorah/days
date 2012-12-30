@@ -1,0 +1,41 @@
+.container
+  - action = @entry.new_record? ? "/admin/entries" : "/admin/entries/#{@entry.id}"
+  %form.form{action: action, method: "POST"}
+    .row-fluid
+      .span8
+        != csrf_tag
+        - unless @entry.new_record?
+          %input.input-block-level{type: 'hidden', name: '_method', value: "PUT"}
+        %p
+          %input.entry-title.input-block-level{type: 'text', name: 'entry[title]', placeholder: "Title", value: @entry.title}
+          %textarea.input-block-level{name: 'entry[body]', rows: 20}= @entry.body
+      .span4
+        %p
+          %input.input-block-level{type: 'text', name: 'entry[slug]', placeholder: "Slug (optional)", value: @entry.slug}
+        %p
+          %legend Published state
+          %label.checkbox
+            %input{type: 'hidden', name: "entry[draft]", value: ''}
+            %input#draft_checkbox{type: 'checkbox', name: "entry[draft]", value: '1', checked: !@entry.new_record? && @entry.published_at.nil?}
+            Draft
+          %input.input-block-level#published_at_box{type: 'text', name: 'entry[published_at]', placeholder: "Published time (optional)", value: @entry.published_at, style: @entry.draft? && 'display: none'}
+        %p
+          %legend Categories
+          - @categories.each do |category|
+            %label.checkbox
+              %input{type: 'checkbox', name: "entry[categories][#{category.id}]", value: '1', checked: @entry.categories.include?(category)}
+              = category.name
+
+    .form-actions
+      %button.btn.btn-primary{type: 'submit'} Save
+
+:javascript
+  jQuery(function ($) {
+    $("#draft_checkbox").change(function () {
+      if (this.checked) {
+        $("#published_at_box").hide();
+      } else {
+        $("#published_at_box").show();
+      }
+    });
+  });
