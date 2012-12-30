@@ -1,6 +1,8 @@
 * pagination
 * Flash messages
 * Ugly establish on App.config =
+* User dropdown on entries/form
+* Feed
 * Show validation errors
   * /admin/users
   * /admin/categories
