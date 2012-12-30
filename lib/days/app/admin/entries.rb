@@ -7,6 +7,7 @@ module Days
 
     get "/admin/entries/new", :admin_only => true do
       @entry = Entry.new
+      @categories = Category.all
       haml :'admin/entries/form', layout: :admin
     end
 
@@ -26,6 +27,7 @@ module Days
           redirect "/admin/entries/#{@entry.id}" # FIXME: Permalink
         else
           status 406
+          @categories = Category.all
           haml :'admin/entries/form', layout: :admin
         end
       else
@@ -35,6 +37,7 @@ module Days
 
     get "/admin/entries/:id", :admin_only => true do
       @entry = Entry.where(id: params[:id]).first || halt(404)
+      @categories = Category.all
       haml :'admin/entries/form', layout: :admin
     end
 
@@ -51,6 +54,7 @@ module Days
         redirect "/admin/entries/#{@entry.id}"
       else
         status 406
+        @categories = Category.all
         haml :'admin/entries/form', layout: :admin
       end
     end
