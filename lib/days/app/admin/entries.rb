@@ -1,7 +1,7 @@
 module Days
   class App < Sinatra::Base
     get "/admin/entries", :admin_only => true do
-      @entries = Entry.all
+      @entries = Entry.order('id DESC').all
       haml :'admin/entries/index', layout: :admin
     end
 

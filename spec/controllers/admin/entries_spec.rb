@@ -19,7 +19,7 @@ describe Days::App, type: :controller do
         render[:data].should == :'admin/entries/index'
 
         entries = render[:ivars][:@entries]
-        entries.should == Days::Entry.all
+        entries.should == Days::Entry.order('id DESC').all
       end
     end
 
