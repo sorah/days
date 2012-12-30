@@ -1,3 +1,5 @@
+* pagination
+* Flash messages
 * Ugly establish on App.config =
 * Show validation errors
   * /admin/users
