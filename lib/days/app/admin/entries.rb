@@ -18,12 +18,9 @@ module Days
             id: entry[:categories].keys.map(&:to_i)
           )
         end
+
         @entry = Entry.new(entry)
         @entry.user = current_user
-
-        unless @entry.published_at
-          @entry.published_at = Time.now
-        end
 
         if @entry.save
           redirect "/admin/entries/#{@entry.id}" # FIXME: Permalink
