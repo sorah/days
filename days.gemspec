@@ -28,8 +28,11 @@ Gem::Specification.new do |gem|
   gem.add_dependency "sass"
 
   gem.add_dependency "redcarpet"
+  gem.add_dependency "builder"
 
   gem.add_dependency "activerecord", "~> 3.2.9"
+  gem.add_dependency "kaminari", "> 0.13.0"
+  gem.add_dependency "padrino-helpers"
   gem.add_dependency "stringex"
   gem.add_dependency "bcrypt-ruby"
 
