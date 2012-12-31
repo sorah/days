@@ -1,4 +1,5 @@
-require 'sinatra'
+require 'sinatra/base'
+require 'kaminari/sinatra'
 require 'sprockets'
 require 'rack/csrf'
 require_relative 'config'
