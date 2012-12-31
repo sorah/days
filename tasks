@@ -3,6 +3,8 @@
 * Ugly establish on App.config =
 * User dropdown on entries/form
 * Feed
+* precompile command
+* Heroku applicable
 * Show validation errors
   * /admin/users
   * /admin/categories
