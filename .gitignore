@@ -20,3 +20,4 @@ tmp
 .DS_Store
 schema.rb
 *.sqlite3
+.sass-cache/
