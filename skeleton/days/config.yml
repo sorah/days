@@ -1,6 +1,6 @@
 defaults: &defaults
   base_path: "/"
-  permalink: "/%year%/%month%/%slug%"
+  permalink: "/{year}/{month}/{slug}"
 
 development:
   <<: *defaults
