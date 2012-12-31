@@ -11,9 +11,11 @@ module Days
 
         case entry
         when Array
+          @title = entry.map(&:title).join(', ')
           @entries = entry
           haml :entries
         when Entry
+          @title = entry.title
           haml :entry, locals: {entry: entry}
         end
       else
@@ -26,10 +28,16 @@ module Days
       haml :entries
     end
 
+    get '/category/:name' do
+      category = Category.where(name: params[:name]).first || halt(404)
+      @entries = category.entries.published.page(params[:page] || 1)
+      haml :entries
+    end
+
     get '/:year/:month' do
       base = Time.local(params[:year].to_i, params[:month].to_i, 1, 0, 0, 0)
       range = (base.beginning_of_month .. base.end_of_month)
-      @entries = Entry.where(published_at: range).published
+      @entries = Entry.where(published_at: range).published.page(params[:page] || 1)
       haml :entries
     end
 

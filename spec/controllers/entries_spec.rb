@@ -39,7 +39,8 @@ describe Days::App, type: :controller do
 
   describe "GET /:year/:month" do
     fixtures :categories, :entries
-    subject { get '/2012/12' }
+    subject { get '/2012/12', params }
+    let(:params) { {} }
 
     it { should be_ok }
 
@@ -49,6 +50,40 @@ describe Days::App, type: :controller do
       base = Time.local(2012, 12, 1, 0, 0, 0)
       range = (base.beginning_of_month .. base.end_of_month)
       render[:ivars][:@entries].to_a.should == Days::Entry.where(published_at: range).published.to_a
+      render[:ivars][:@entries].current_page.should == 1
+    end
+
+    context "with page param" do
+      let(:params) { {page: 2} }
+
+      it "renders entries" do
+        render[:data].should == :entries
+        render[:ivars][:@entries].current_page.should == 2
+      end
+    end
+  end
+
+  describe "GET /category/:name" do
+    fixtures :categories, :entries
+    subject { get '/category/daily', params }
+    let(:params) { {} }
+
+    it { should be_ok }
+
+    it "renders entries" do
+      render[:data].should == :entries
+
+      render[:ivars][:@entries].to_a.should == categories(:daily).entries.published.to_a
+      render[:ivars][:@entries].current_page.should == 1
+    end
+
+    context "with page param" do
+      let(:params) { {page: 2} }
+
+      it "renders entries" do
+        render[:data].should == :entries
+        render[:ivars][:@entries].current_page.should == 2
+      end
     end
   end
 
