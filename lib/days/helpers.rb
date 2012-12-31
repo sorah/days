@@ -2,6 +2,10 @@ require 'rack/csrf'
 
 module Days
   module Helpers
+    def config
+      Days::App.config
+    end
+
     def logged_in?
       !!session[:user_id]
     end
