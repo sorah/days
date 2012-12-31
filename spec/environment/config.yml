@@ -1,6 +1,7 @@
 defaults: &defaults
   base_path: "/"
   permalink: "/{year}/{month}/{slug}"
+  title: "My Blog"
 
 development:
   <<: *defaults
