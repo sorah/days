@@ -3,6 +3,7 @@ require 'sprockets'
 require 'rack/csrf'
 require_relative 'config'
 require_relative 'models'
+require_relative 'helpers'
 require 'haml'
 require 'sass'
 
@@ -46,23 +47,7 @@ module Days
 
     set :haml, :escape_html => true
 
-    helpers do
-      def logged_in?
-        !!session[:user_id]
-      end
-
-      def current_user
-        @current_user ||= session[:user_id] ? User.where(id: session[:user_id]).first : nil
-      end
-
-      def csrf_token
-        Rack::Csrf.csrf_token(env)
-      end
-
-      def csrf_tag
-        Rack::Csrf.csrf_tag(env)
-      end
-    end
+    helpers Helpers
 
     set :admin_only do |_|
       condition do
