@@ -55,6 +55,7 @@ module Days
         entry = query.first
         return nil unless entry
         published_at = entry.published_at
+        return nil unless published_at
 
         return nil if match[:slug]   && match[:slug]        != entry.slug
         return nil if match[:id]     && match[:id].to_i     != entry.id

@@ -104,5 +104,14 @@ describe Days::Helpers do
 
       it { should == [entry_a, entry_b] }
     end
+
+    context "when entry has not published" do
+      before do
+        entry_a.draft = true
+        entry_a.save
+      end
+
+      it { should be_nil }
+    end
   end
 end
