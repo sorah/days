@@ -23,10 +23,11 @@
               %input{type: 'hidden', name: '_method', value: 'DELETE'}
               %button.btn.btn-small.btn-danger{type: 'submit'} Delete
             %button.btn.btn-small.category-edit Edit
-  %form.form-inline{action: '/admin/categories', method: 'POST'}
+  %form.form-inline#category_add{action: '/admin/categories', method: 'POST'}
     != csrf_tag
     %input.input-small{type: 'text', name: 'category[name]', placeholder: 'Name'}
     %button.btn.btn-primary{type: 'submit'} Add
+    %span.help-block{style: 'display: none;'} We recommend to use lowercase for category name; Because currently we use category name directly for category page. (/category/...)
 
 :javascript
   jQuery(function($){
@@ -41,5 +42,12 @@
         row.find(".name").show();
         row.find(".form").hide();
       });
+    });
+    $("#category_add input").keyup(function () {
+      if (this.value.match(/[A-Z]/)) {
+        $("#category_add .help-block").show();
+      } else {
+        $("#category_add .help-block").hide();
+      }
     });
   })
