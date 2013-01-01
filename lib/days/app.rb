@@ -8,6 +8,8 @@ require_relative 'helpers'
 require 'haml'
 require 'sass'
 
+I18n.load_path.reject! {|_| _.match(/padrino/) }
+
 module Days
   class App < Sinatra::Base
     set :root, File.expand_path(File.join(__FILE__, '..', '..', '..', 'app'))
