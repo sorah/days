@@ -51,6 +51,7 @@ module Days
     set :haml, :escape_html => true
 
     helpers Helpers
+    helpers Kaminari::Helpers::SinatraHelpers
 
     set :admin_only do |_|
       condition do
