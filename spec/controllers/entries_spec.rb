@@ -61,6 +61,14 @@ describe Days::App, type: :controller do
         render[:ivars][:@entries].current_page.should == 2
       end
     end
+
+    context "with character" do
+      it "returns not found" do
+        get('/aaa/01').should   be_not_found
+        get('/2012/bbb').should be_not_found
+        get('/aaa/bbb').should  be_not_found
+      end
+    end
   end
 
   describe "GET /category/:name" do

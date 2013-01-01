@@ -35,7 +35,13 @@ module Days
     end
 
     get '/:year/:month' do
-      base = Time.local(params[:year].to_i, params[:month].to_i, 1, 0, 0, 0)
+      halt 404 if /[^0-9]/ =~ params[:year] || /[^0-9]/ =~ params[:month]
+      begin
+        base = Time.local(params[:year].to_i, params[:month].to_i, 1, 0, 0, 0)
+      rescue ArgumentError
+        halt 404
+      end
+
       range = (base.beginning_of_month .. base.end_of_month)
       @entries = Entry.where(published_at: range).published.page(params[:page] || 1)
       haml :entries
