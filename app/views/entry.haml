@@ -1,0 +1,27 @@
+%article.entry
+  .left
+    %span.date= entry.published_at.strftime("%Y-%m-%d")
+    != haml :entry_left, locals: {entry: entry} rescue ''
+  .right
+    %header
+      %h1
+        %a{href: entry_path(entry)}= entry.title
+      .categories
+        - entry.categories.each do |category|
+          %span.category
+            %a{href: "/category/#{category.name}"}>= category.name
+
+      != haml :entry_header, locals: {entry: entry} rescue ''
+    %section
+      != entry.rendered
+    %footer
+      Published at
+      %date #{entry.published_at}
+      |
+      %a{href: entry_path(entry)} Permalink
+      - if logged_in?
+        |
+        %a{href: "/admin/entries/#{entry.id}"} Edit
+
+      != haml :entry_footer, locals: {entry: entry} rescue ''
+.clear

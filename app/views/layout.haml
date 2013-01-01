@@ -1,0 +1,32 @@
+!!! 5
+%html
+  %head
+    %meta{charset: 'UTF-8'}
+    %link{rel: 'stylesheet', type: 'text/css', href: '/assets/style.css'}
+    %link{rel: "alternate", type: "application/atom+xml", href: '/feed', title: 'Feed'}
+    != haml :head rescue ''
+    - if @title
+      %title #{@title} - #{config.title}
+    - else
+      %title= config.title
+  %body
+    .container
+      %header#header
+        %h1
+          %a{href: '/'}= config.title
+      != yield
+      %footer#footer
+        %section
+          %nav
+            %h3 Categories
+            %ul
+              - Days::Category.all.each do |category|
+                %li
+                  %a{href: "/category/#{URI.encode_www_form_component(category.name)}"}= category.name
+        %section
+          %h3 Recent Entries
+          %ul
+            - Days::Entry.published.first(10).each do |entry|
+              %li
+                %a{href: entry_path(entry)}= entry.title
+

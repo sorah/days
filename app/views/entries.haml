@@ -1,0 +1,4 @@
+- @entries.each do |entry|
+  != haml :entry, locals: {entry: entry}
+
+!= paginate @entries
