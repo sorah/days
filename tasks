@@ -1,10 +1,13 @@
+* Show permalink on Entry Edit page
 * Read more
-* Flash messages
-* Ugly establish on App.config =
-* User dropdown on entries/form
-* precompile command
-* Heroku applicable
+* Lokka importer
 * Show validation errors
   * /admin/users
   * /admin/categories
   * /admin/entries
+* Flash messages
+* User dropdown on entries/form
+* Heroku applicable
+* Add database level restriction
+* Ugly establish on App.config =
+* precompile command
