@@ -13,6 +13,45 @@ module Days
       FileUtils.cp_r Dir["#{SKELETON_PATH}/*"], "#{dir}/"
     end
 
+    desc "init_theme [DIR]", "Generate template of theme (views) to DIR (default = ./)"
+    def init_theme(dir = ".")
+      if File.exists?(File.join(dir, 'views')) || File.exists?(File.join(dir, 'stylesheets'))
+        puts "This will override the following:"
+        puts "* #{dir}/views/entries.haml"
+        puts "* #{dir}/views/entry.haml"
+        puts "* #{dir}/views/layout.haml"
+        puts "* #{dir}/stylesheets/style.scss"
+
+        print "Continue (y/n)? "
+
+        while _ = $stdin.gets
+          case _
+          when /^y|yes$/
+            break
+          when /^n|no$/
+            puts 'Cancelled.'
+            return
+          else
+            print "Please answer in 'yes' or 'no' or 'y' or 'n': "
+          end
+        end
+      end
+
+      require 'fileutils'
+
+      root = File.expand_path(File.join(__FILE__, '..', '..', '..', 'app'))
+      FileUtils.mkdir_p File.join(dir, 'views')
+      FileUtils.mkdir_p File.join(dir, 'stylesheets')
+
+      %w(entries.haml entry.haml layout.haml).each do |file|
+        FileUtils.cp(File.join(root, 'views', file),
+                     File.join(dir,  'views', file))
+      end
+
+      FileUtils.cp(File.join(root, 'stylesheets', 'style.scss'),
+                   File.join(dir,  'stylesheets', 'style.scss'))
+    end
+
     desc "server", "Starts the server"
     method_option :config, :type => :string, :aliases => "-c"
     method_option :port, :type => :numeric, :aliases => "-p", :default => 3162
