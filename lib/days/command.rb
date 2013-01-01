@@ -73,10 +73,10 @@ module Days
       Rack::Server.start(rack_options)
     end
 
-    desc "precompile", "Precompile the assets for production"
-    method_option :config, :type => :string, :aliases => "-c"
-    def precompile
-    end
+    # desc "precompile", "Precompile the assets for production"
+    # method_option :config, :type => :string, :aliases => "-c"
+    # def precompile
+    # end
 
     desc "migrate [ENV]", "Run database migration for environment (default = development)"
     method_option :config, :type => :string, :aliases => "-c"
