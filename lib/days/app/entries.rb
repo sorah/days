@@ -16,7 +16,7 @@ module Days
           haml :entries
         when Entry
           @title = entry.title
-          haml :entry, locals: {entry: entry}
+          haml :entry, locals: {entry: entry, full: true}
         end
       else
         ''
@@ -75,7 +75,7 @@ module Days
 
             xml.title entry.title
 
-            xml.content(entry.rendered, type: 'html')
+            xml.content(entry.short_rendered { '... <a href="'+entry_path(entry)+'">Continue Reading</a>' }, type: 'html')
           end
         end
       end

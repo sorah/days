@@ -1,3 +1,4 @@
+- full ||= false
 %article.entry
   .left
     %span.date= entry.published_at.strftime("%Y-%m-%d")
@@ -13,7 +14,11 @@
 
       != haml :entry_header, locals: {entry: entry} rescue ''
     %section
-      != entry.rendered
+      - if full
+        != entry.rendered.gsub(/<!-- *more *-->/,'<a name="more"></a>')
+      - else
+        != entry.short_rendered { "... <a href=\"#{entry_path(entry)}#more\">Continue Reading...</a>"}
+
     %footer
       Published at
       %date #{entry.published_at}
