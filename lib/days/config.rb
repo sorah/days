@@ -5,6 +5,14 @@ require 'settingslogic'
 
 module Days
   class Config < Settingslogic
+    def self.namespace(value = nil)
+      if value
+        @namespace = value
+      else
+        @namespace
+      end
+    end
+
     namespace App.environment.to_s
 
     def initialize(hash_or_file = {}, section = nil)
@@ -24,6 +32,7 @@ module Days
         end
       end
     end
+
 
     def establish_db_connection(force=false)
       if Days::App.environment.to_sym == :development && (self.has_key?(:activerecord_log) ? self.activerecord_log == true : true)
