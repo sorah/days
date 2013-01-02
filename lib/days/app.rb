@@ -53,6 +53,14 @@ module Days
     helpers Helpers
     helpers Kaminari::Helpers::SinatraHelpers
 
+    before do
+      # for thread safe
+      begin
+        ActionView::LogSubscriber.log_subscribers.clear
+      rescue NameError, NoMethodError
+      end
+    end
+
     set :admin_only do |_|
       condition do
         unless logged_in?
