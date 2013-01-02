@@ -1,7 +1,7 @@
 class CreateCategories < ActiveRecord::Migration
   def change
     create_table :categories do |t|
-      t.string :name
+      t.string :name, null: false, unique: true
     end
 
     create_table :categories_entries do |t|

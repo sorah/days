@@ -1,12 +1,12 @@
 class CreateEntries < ActiveRecord::Migration
   def change
     create_table :entries do |t|
-      t.string :title
-      t.text :body
-      t.text :rendered
+      t.string   :title,       null: false
+      t.text     :body,        null: false
+      t.text     :rendered,    null: false
+      t.string   :slug,        null: false, unique: true
+      t.integer  :user_id
       t.datetime :published_at
-      t.integer :user_id
-      t.string :slug
 
       t.timestamps
     end
