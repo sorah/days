@@ -11,13 +11,18 @@
             - if @entry.new_record?
               New Entry
             - else
-              Editing Entry
+              Editing Entry:
+              %a{href: entry_path(@entry)}= @entry.title
           %input.entry-title.input-block-level{type: 'text', name: 'entry[title]', placeholder: "Title", value: @entry.title}
           %textarea.input-block-level{name: 'entry[body]', rows: 20}= @entry.body
       .span4
         %p
-          %legend Permalink option
+          %legend Permalink
           %input.input-block-level{type: 'text', name: 'entry[slug]', placeholder: "Slug (optional)", value: @entry.slug}
+          %p
+            - if @entry.published_at
+              Published at:
+              %a{href: entry_path(@entry)} #{request.host_with_port}#{entry_path(@entry)}
         %p
           %legend Publishing options
           %label.checkbox
