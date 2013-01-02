@@ -205,4 +205,34 @@ describe Days::Entry do
       end
     end
   end
+
+  describe "#short_rendered" do
+    subject do
+      described_class.new(title: 'title', body: body)
+    end
+
+    before do
+      subject.valid?
+    end
+
+    let(:body) { "a\n\n<!--more-->\n\nb" }
+
+    it "deletes after <!--more-->" do
+      subject.short_rendered.should == "<p>a</p>\n\n"
+    end
+
+    context "without <!--more--> in body" do
+      let(:body) { "a\n\nb" }
+
+      it "returns entire rendered body" do
+        subject.short_rendered.should == subject.rendered
+      end
+    end
+
+    context "with block" do
+      it "replaces by block evaluation result" do
+        subject.short_rendered { "hi!" }.should == "<p>a</p>\n\nhi!"
+      end
+    end
+  end
 end

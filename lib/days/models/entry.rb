@@ -38,6 +38,10 @@ module Days
       self.published_at && Time.now < self.published_at
     end
 
+    def short_rendered
+      self.rendered.gsub(/<!-- *more *-->.+\z/m, block_given? ? yield(self) : '')
+    end
+
     before_validation do
       if draft?
         self.published_at = nil
