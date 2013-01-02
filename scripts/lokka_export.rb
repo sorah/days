@@ -30,7 +30,7 @@ Post.order('id ASC').all.each do |post|
   hash[:slug] = post.slug
   hash[:title] = post.title
   hash[:body] = post.body
-  if post.draft == 1
+  if post.draft
     hash[:published_at] = nil
     hash[:draft] = true
   else
