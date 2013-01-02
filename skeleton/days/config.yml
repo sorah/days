@@ -21,6 +21,7 @@ test:
 
 production:
   <<: *defaults
+<% unless ENV["DATABASE_URL"] %>
   database:
     adapter: mysql2
     encoding: utf8
@@ -29,4 +30,4 @@ production:
     username: foo
     password: bar
     socket: /tmp/mysql.sock
-
+<% end %>

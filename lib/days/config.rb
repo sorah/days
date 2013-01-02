@@ -17,6 +17,7 @@ module Days
         end
 
         self['database'].tap do |hash|
+          next unless hash
           if hash['adapter'] == 'sqlite3' && /^\// !~ hash['database']
             hash['database'] = File.join(self.root, hash['database'])
           end
@@ -33,7 +34,7 @@ module Days
         raise ActiveRecord::ConnectionNotEstablished if force
         return ActiveRecord::Base.connection
       rescue ActiveRecord::ConnectionNotEstablished
-        ActiveRecord::Base.establish_connection Hash[self.database]
+        ActiveRecord::Base.establish_connection(self['database'] ? Hash[self.database] : ENV["DATABASE_URL"])
         retry
       end
     end
