@@ -13,7 +13,8 @@
     %tbody
       - @entries.each do |entry|
         %tr
-          %td= entry.title
+          %td{style: 'width: 60%'}
+            %a{href: "/admin/entries/#{entry.id}"}= entry.title
           %td
             - if entry.published_at
               = entry.published_at
@@ -23,6 +24,7 @@
               %span.label.label-success Scheduled
           %td
             %a.btn.btn-small{href: "/admin/entries/#{entry.id}"} Edit
+            %a.btn.btn-small{href: entry_path(entry), class: entry.published? ? '' : 'disabled'} Show
             %form.form-inline.inlm{action: "/admin/entries/#{entry.id}", method: "POST"}
               != csrf_tag
               %input{type: 'hidden', name: '_method', value: 'DELETE'}
