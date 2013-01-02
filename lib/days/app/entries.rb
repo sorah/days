@@ -49,7 +49,7 @@ module Days
 
     get '/feed' do
       content_type 'application/atom+xml'
-      entries = Entry.published.last(50)
+      entries = Entry.published.first(50)
 
       xml = Builder::XmlMarkup.new
 
