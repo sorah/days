@@ -98,6 +98,53 @@ module Days
       Pry.start(binding)
     end
 
+    desc "import FILE", "Import entries from file."
+    method_option :config, :type => :string, :aliases => "-c"
+    method_option :environment, :type => :string, :aliases => "-e", :default => "development"
+    def import(file)
+      set_env
+      config.establish_db_connection()
+      require 'json'
+      users = {}
+      categories = {}
+      open(file, 'r') do |io|
+        io.readlines.each do |line|
+          line = JSON.parse(line)
+
+          attributes ={}
+          if Entry.where(id: line['id']).count.zero?
+            attributes[:id] = line['id']
+          end
+
+          if line['user']
+            if users.has_key?(line['user'])
+              user = users[line['user']]
+            else
+              user = users[line['user']] = User.where(login_name: line['user']).first
+            end
+
+
+            attributes[:user] = user if user
+          end
+
+          if line['category']
+            attributes[:categories] = line['category'].map do |category_name|
+              categories[category_name] ||= Category.find_or_create_by_name!(category_name)
+            end
+          end
+
+          attributes[:slug] = line['slug'] if line['slug']
+          attributes[:title] = line['title'] if line['title']
+          attributes[:body] = line['body'] if line['body']
+          attributes[:published_at] = line['published_at'] if line['published_at']
+          attributes[:draft] = line['draft'] if line['draft']
+
+          p attributes[:title]
+          Entry.create!(attributes)
+        end
+      end
+    end
+
     private
 
     def set_env(env = nil)
