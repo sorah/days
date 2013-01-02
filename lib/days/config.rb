@@ -26,7 +26,7 @@ module Days
     end
 
     def establish_db_connection(force=false)
-      if !self.has_key?(:activerecord_log) || self.activerecord_log == true
+      if Days::App.environment.to_sym == :development && (self.has_key?(:activerecord_log) ? true : self.activerecord_log == true)
         ActiveRecord::Base.logger = Logger.new($stdout)
       end
 
