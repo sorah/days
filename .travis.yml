@@ -1,0 +1,9 @@
+language: ruby
+rvm:
+  - 1.9.2
+  - 1.9.3
+notifications:
+  email:
+    - sorah@tubusu.net
+script: "rm spec/environment/db/test.sqlite3; bundle exec rspec -fp spec"
+
