@@ -1,3 +1,3 @@
 module Days
-  VERSION = "0.0.1.earlier"
+  VERSION = "0.1.0"
 end
