@@ -1,5 +1,7 @@
 # Days
 
+[![Build Status](https://travis-ci.org/sorah/days.png?branch=master)](https://travis-ci.org/sorah/days)
+
 TODO: Write a gem description
 
 ## Installation
