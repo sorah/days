@@ -18,6 +18,8 @@ module Days
       order('published_at DESC')
     end
 
+    paginates_per 12
+
     def draft=(x)
       if x.present?
         @draft = true
