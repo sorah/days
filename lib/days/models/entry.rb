@@ -13,6 +13,7 @@ module Days
     has_and_belongs_to_many :categories, class_name: 'Days::Category'
 
     scope :published, -> do
+      includes(:categories).
       where('published_at IS NOT NULL AND published_at <= ?', Time.now).
       order('published_at DESC')
     end
