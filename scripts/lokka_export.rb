@@ -31,10 +31,10 @@ Post.order('id ASC').all.each do |post|
   hash[:title] = post.title
   hash[:body] = post.body
   if post.draft == 1
-    hash[:published_at] = post.created_at
-  else
     hash[:published_at] = nil
     hash[:draft] = true
+  else
+    hash[:published_at] = post.created_at
   end
   if post.category
     hash[:category] = [post.category.title]
