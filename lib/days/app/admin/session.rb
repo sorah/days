@@ -1,7 +1,7 @@
 module Days
   class App < Sinatra::Base
     get "/admin/login" do
-      haml :'admin/login'
+      haml :'admin/login', layout: false
     end
 
     post "/admin/login" do
@@ -16,7 +16,7 @@ module Days
         redirect '/admin'
       else
         status 401
-        haml :'admin/login'
+        haml :'admin/login', layout: false
       end
     end
 
