@@ -138,6 +138,7 @@ module Days
           attributes[:body] = line['body'] if line['body']
           attributes[:published_at] = line['published_at'] if line['published_at']
           attributes[:draft] = line['draft'] if line['draft']
+          attributes[:old_path] = line['old_path'] if line['old_path']
 
           p attributes[:title]
           Entry.create!(attributes)
