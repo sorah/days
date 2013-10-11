@@ -6,6 +6,7 @@ entry_one:
   published_at: 2012-11-15 00:00:00
   user: blogger
   categories: daily, rainy
+  old_path: '/post/old-path'
 
 entry_two:
   title: "Today was"

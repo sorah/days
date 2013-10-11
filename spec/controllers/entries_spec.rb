@@ -37,6 +37,31 @@ describe Days::App, type: :controller do
     end
   end
 
+  describe "redirection from old path" do
+    fixtures :categories, :entries
+    let(:path) { nil }
+    subject { get path, {}, {} }
+
+    before do
+      Days::App.any_instance.stub(lookup_entry: nil)
+    end
+
+    context "when entry not found" do
+      let(:path) { '/post/like-old-but-not-exists' }
+
+      it { should be_not_found }
+    end
+
+    context "when entry found by old path" do
+      let(:path) { '/post/old-path' }
+
+      it "redirects to present path" do
+        expect(subject.status).to eq 301
+        expect(subject['Location']).to eq '/2012/11/today-is-a-rainy-day'
+      end
+    end
+  end
+
   describe "GET /:year/:month" do
     fixtures :categories, :entries
     subject { get '/2012/12', params }

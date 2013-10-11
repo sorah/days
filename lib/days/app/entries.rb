@@ -13,13 +13,16 @@ module Days
         when Array
           @title = entry.map(&:title).join(', ')
           @entries = entry
-          haml :entries
+          return haml(:entries)
         when Entry
           @title = entry.title
-          haml :entry, locals: {entry: entry, full: true}
+          return haml(:entry, locals: {entry: entry, full: true})
         end
-      else
-        ''
+      end
+
+      entry = Entry.where(old_path: request.path).first
+      if entry
+        return [301, {'Location' => entry_path(entry)}, ""]
       end
     end
 

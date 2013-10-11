@@ -22,8 +22,8 @@ module Days
       Rack::Csrf.csrf_tag(env)
     end
 
-    def entry_path(entry)
-      return nil unless entry.published?
+    def entry_path(entry, allow_draft=false)
+      return nil unless allow_draft || entry.published?
 
       published_at = entry.published_at
       hash = {
