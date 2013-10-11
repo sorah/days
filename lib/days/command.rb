@@ -113,7 +113,9 @@ module Days
 
           attributes ={}
           if line['id'] && Entry.where(id: line['id']).count.zero?
-            attributes[:id] = line['id']
+            new_id = line['id']
+          else
+            new_id = nil
           end
 
           if line['user']
@@ -141,7 +143,9 @@ module Days
           attributes[:old_path] = line['old_path'] if line['old_path']
 
           p attributes[:title]
-          Entry.create!(attributes)
+          entry = Entry.new(attributes)
+          entry.id = new_id if new_id
+          entry.save!
         end
       end
     end

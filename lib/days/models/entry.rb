@@ -4,7 +4,7 @@ require 'redcarpet'
 
 module Days
   class Entry < ActiveRecord::Base
-    attr_accessible :title, :body, :slug, :published_at, :categories, :user, :draft
+    attr_accessible :title, :body, :slug, :published_at, :categories, :user, :draft, :old_path
 
     validates_uniqueness_of :slug
     validates_presence_of :title, :body, :rendered, :slug
