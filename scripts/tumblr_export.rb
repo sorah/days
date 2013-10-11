@@ -1,4 +1,5 @@
 require 'json'
+require 'stringex'
 require 'time'
 require 'open-uri'
 
@@ -32,6 +33,8 @@ ignore_id = !!ARGV.delete('--ignore-ids')
 tumblelog = ARGV[0]
 api_key = ARGV[1] || ENV["TUMBLR_API_KEY"] || ask_for_key
 
+slugs = {}
+
 offset = 0
 loop do
   payload = get_posts(tumblelog, api_key, offset)
@@ -45,7 +48,11 @@ loop do
     entry[:body] = post['body']
     entry[:published_at] = Time.parse(post['date']).localtime
     entry[:draft] = post['state'] != 'published'
-    entry[:old_path] = URI.parse(post['post_url']).request_uri
+    post_uri = URI.parse(post['post_url'])
+    entry[:old_path] = post_uri.request_uri
+    if %r{\A/post/(\d+?)/(.+)\z} === post_uri.request_uri
+      entry[:slug] = $2
+    end
 
     case post['type']
     when 'text'
@@ -161,6 +168,18 @@ loop do
 </section>
       EOF
     end
+
+    if entry[:title].nil? || entry[:title].empty? || /\A\s*\z/ === entry[:title]
+      entry[:title] = "#{(post['type'] || 'Post').capitalize} at #{post['date']}"
+      entry[:slug] = "#{post['type'] || 'post'}-#{post['id']}"
+    end
+
+    entry[:slug] ||= entry[:title].to_url
+    if slugs[entry[:slug]]
+      entry[:slug].prepend "#{post['id']}-"
+    end
+    slugs[entry[:slug]] = true
+
 
     puts entry.to_json
   end
