@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Days::VERSION
   gem.authors       = ["Shota Fukumori (sora_h)"]
   gem.email         = ["sorah@tubusu.net"]
-  gem.description   = %q{Simple blog system built up with Sinatra. Under in development}
-  gem.summary       = %q{Simple blog system built up with Sinatra. Under in development}
+  gem.description   = %q{Simple blog system built up with Sinatra.}
+  gem.summary       = %q{Simple blog system built up with Sinatra.}
   gem.homepage      = "https://github.com/sorah/days"
 
   gem.files         = `git ls-files`.split($/)
