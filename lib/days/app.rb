@@ -28,7 +28,7 @@ module Days
 
         map '/' do
           if app.environment != 'test'
-            use Rack::Session::Cookie
+            use Rack::Session::Cookie, secret: app.session_secret
             use Rack::Csrf
           end
           if app.environment == 'development'
