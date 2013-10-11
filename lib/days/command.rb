@@ -112,7 +112,7 @@ module Days
           line = JSON.parse(line)
 
           attributes ={}
-          if Entry.where(id: line['id']).count.zero?
+          if line['id'] && Entry.where(id: line['id']).count.zero?
             attributes[:id] = line['id']
           end
 
