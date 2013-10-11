@@ -71,7 +71,7 @@ loop do
   <div class="t-photos-caption">
   #{post['caption']}
   </div>
-</div>
+</section>
       EOF
     when 'quote'
       entry[:title] = post['text'] ? post['text'].dup : ''
