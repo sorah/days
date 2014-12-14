@@ -4,6 +4,12 @@
 
 Days is simple blog system built up with Sinatra.
 
+## Development status
+
+- Currently `master` branch is in active development (e.g. switching to Sequel from ActiveRecord)
+  - Any documentation can easily be outdated.
+  - See [v0.2.0](https://github.com/sorah/days/tree/v0.2.0) tree for the stable information.
+
 ## Installation
 
     $ gem install days
