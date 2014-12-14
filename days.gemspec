@@ -40,7 +40,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "sqlite3"
 
-  gem.add_development_dependency "rspec"
+  gem.add_development_dependency "rspec", '< 3.0'
   gem.add_development_dependency "rack-test"
   gem.add_development_dependency "fuubar"
 
