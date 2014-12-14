@@ -36,6 +36,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency "stringex", '~> 1.5.1'
   gem.add_dependency "bcrypt-ruby", '~> 3.0.1'
 
+  gem.add_dependency 'sequel', '~> 4.17.0'
+
   gem.add_development_dependency "sqlite3"
 
   gem.add_development_dependency "rspec"

@@ -2,6 +2,7 @@ require_relative 'app'
 require 'active_record'
 require 'logger'
 require 'settingslogic'
+require 'sequel'
 
 module Days
   class Config < Settingslogic
@@ -33,6 +34,31 @@ module Days
       end
     end
 
+    def db
+      @db ||= Sequel.connect(*sequel_configuration)
+    end
+
+    def sequel_configuration
+      return ENV['DATABASE_URL'] if ENV['DATABASE_URL']
+
+      sequel = self['sequel'].dup || {}
+
+      if sequel.key?('log')
+        log = sequel.delete('log')
+      else
+        log = Days::App.environment.to_sym == :development
+      end
+
+      if log
+        sequel['logger'] = Logger.new($stdout)
+      end
+
+      if sequel['url']
+        return [sequel.delete('url'), sequel]
+      end
+
+      sequel
+    end
 
     def establish_db_connection(force=false)
       if Days::App.environment.to_sym == :development && (self.has_key?(:activerecord_log) ? self.activerecord_log == true : true)
