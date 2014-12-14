@@ -16,6 +16,6 @@ notifications:
     - travis-ci@sorah.jp
 
 script:
-  - [ -e spec/environment/db/test.sqlite3 ] && rm spec/environment/db/test.sqlite3
+  - '[ -e spec/environment/db/test.sqlite3 ] && rm spec/environment/db/test.sqlite3'
   - bundle exec rspec -fd spec
 
