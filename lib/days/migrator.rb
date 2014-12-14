@@ -1,32 +1,35 @@
+require 'logger'
+
 module Days
   module Migrator
+    MIGRATIONS_DIR =  "#{__dir__}/migrations"
     def self.start(config, options = {})
-      require 'active_record'
-      require 'active_support/core_ext/class/attribute_accessors.rb'
-      require 'active_record/schema_dumper'
+      Sequel.extension :migration
 
-      config.establish_db_connection()
-      orig_logger = ActiveRecord::Base.logger
-      begin
-        ActiveRecord::Base.logger = nil unless options[:show_sql]
-        ActiveRecord::Migration.verbose = options[:verbose]
+      if config.db.table_exists?(:schema_migrations) &&
+           !config.db.schema(:schema_migrations).assoc(:filename)
+        puts "=> Converting Rails' `schema_migrations` for sequel" unless options[:quiet]
 
-        migration_paths = [
-          config[:migration_path] || "#{config.root}/db/migrate",
-          File.expand_path(File.join(__FILE__, '..', 'migrate'))
-        ]
-        ActiveRecord::Migrator.migrate(migration_paths, options[:version]) do |migration|
-          options[:scope].blank? || (options[:scope] == migration.scope)
+        config.db.alter_table(:schema_migrations) { add_column :filename, String }
+
+        migrations = Dir[File.join(MIGRATIONS_DIR, '*.rb')].map{ |_| File.basename(_) }
+
+        config.db[:schema_migrations].each do |row|
+          filename = migrations.find{ |_| _.start_with?("#{row[:version]}_") }
+
+          config.db[:schema_migrations].where(version: row[:version]).update(filename: filename)
         end
 
-        schema_file = config[:schema] || "#{config.root}/db/schema.rb"
-        File.open(schema_file, "w:utf-8") do |io|
-          ActiveRecord::SchemaDumper.dump ActiveRecord::Base.connection, io
+        config.db.alter_table(:schema_migrations) do
+          drop_column :version
+          add_primary_key [:filename]
         end
+      end
 
-        self
-      ensure
-        ActiveRecord::Base.logger = orig_logger
+      if options[:version]
+        Sequel::Migrator.run config.db, MIGRATIONS_DIR, target: options[:version]
+      else
+        Sequel::Migrator.run config.db, MIGRATIONS_DIR
       end
     end
   end
