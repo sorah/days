@@ -1,8 +1,21 @@
 language: ruby
+cache: bundler
+
 rvm:
-  - 1.9.2
+  - 2.1
+  - 2.2
+  - ruby-head
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - "ruby-head"
+
 notifications:
   email:
-    - sorah@tubusu.net
-script: "rm spec/environment/db/test.sqlite3; bundle exec rspec -fp spec"
+    - travis-ci@sorah.jp
+
+script:
+  - [ -e spec/environment/db/test.sqlite3 ] && rm spec/environment/db/test.sqlite3
+  - bundle exec rspec -fd spec
 
