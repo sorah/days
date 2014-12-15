@@ -10,31 +10,20 @@ describe Days::Helpers do
     end
   end
 
-  let(:entry_a) do
-    Days::Entry.where(slug: "sushi").first
-  end
-
-  let(:entry_b) do
-    Days::Entry.where(slug: "neko").first
-  end
-
-  before(:all) do
-    Days::Entry.destroy_all
-    entry_a = Days::Entry.create(
+  let!(:entry_a) do
+    Days::Entry.create(
       title: 'Sushi', body: 'Sushi!',
       published_at: Time.local(2012, 12, 31, 9, 24, 42),
       slug: "sushi"
     )
-    entry_b = Days::Entry.create(
+  end
+
+  let!(:entry_b) do
+    Days::Entry.create(
       title: 'Neko', body: 'Meow!',
       published_at: Time.local(2012, 12, 31, 19, 14, 32),
       slug: "neko"
     )
-
-  end
-
-  after(:all) do
-    Days::Entry.destroy_all
   end
 
   let(:permalink) { "/{year}/{month}/{day}/{hour}/{minute}/{second}/{id}-{slug}" }

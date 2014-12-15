@@ -124,6 +124,11 @@ RSpec.configure do |config|
     ActiveRecord::Base.logger = nil
   end
 
+  config.after(:each) do
+    %i(categories_entries categories entries users).each do |x|
+      Sequel::Model.db.from(x).truncate
+    end
+  end
 
   config.include AppSpecHelper, type: :controller
   config.include FixturesAdapter
