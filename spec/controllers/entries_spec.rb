@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Days::App, type: :controller do
   describe "entry page" do
-    fixtures :categories, :entries
     let(:path) { '/2012/12/slug' }
     subject { get path, {}, {} }
 
@@ -10,7 +9,7 @@ describe Days::App, type: :controller do
       Days::App.any_instance.should_receive(:lookup_entry).at_least(:once).with(path).and_return(result)
     end
 
-    let(:result) { entries(:entry_one) }
+    let(:result) { Days::Entry.create!(title: 'foo', body: 'foo') }
 
     it { should be_ok }
 
@@ -26,7 +25,12 @@ describe Days::App, type: :controller do
     end
 
     context "when lookup_entry returned Array" do
-      let(:result) { [entries(:entry_one), entries(:entry_two)] }
+      let(:result) {
+        [
+          Days::Entry.create!(title: 'foo', body: 'foo'),
+          Days::Entry.create!(title: 'foo2', body: 'foo')
+        ]
+      }
 
       it { should be_ok }
 
@@ -38,12 +42,12 @@ describe Days::App, type: :controller do
   end
 
   describe "redirection from old path" do
-    fixtures :categories, :entries
     let(:path) { nil }
     subject { get path, {}, {} }
 
     before do
       Days::App.any_instance.stub(lookup_entry: nil)
+      Days::Entry.create!(title: 'new', body: 'foo', old_path:  '/post/old-path', published_at: Time.local(2012,11,30,0,0,0))
     end
 
     context "when entry not found" do
@@ -57,15 +61,20 @@ describe Days::App, type: :controller do
 
       it "redirects to present path" do
         expect(subject.status).to eq 301
-        expect(subject['Location']).to eq '/2012/11/today-is-a-rainy-day'
+        expect(subject['Location']).to eq '/2012/11/new'
       end
     end
   end
 
   describe "GET /:year/:month" do
-    fixtures :categories, :entries
     subject { get '/2012/12', params }
     let(:params) { {} }
+
+    before do
+      Days::Entry.create!(title: '1', body: 'a', published_at: Time.local(2012, 11, 15, 0, 0, 0))
+      Days::Entry.create!(title: '2', body: 'a', published_at: Time.local(2012, 12, 25, 0, 0, 0))
+      Days::Entry.create!(title: '3', body: 'a', published_at: Time.local(2012, 12, 5, 0, 0, 0))
+    end
 
     it { should be_ok }
 
@@ -97,16 +106,18 @@ describe Days::App, type: :controller do
   end
 
   describe "GET /category/:name" do
-    fixtures :categories, :entries
-    subject { get '/category/daily', params }
+    subject { get '/category/cat', params }
     let(:params) { {} }
 
     it { should be_ok }
 
+    let!(:category) { Days::Category.create!(name: 'cat') }
+    let!(:entry) { Days::Entry.create!(title: 'a', body: 'a', categories: [category]) }
+
     it "renders entries" do
       render[:data].should == :entries
 
-      render[:ivars][:@entries].to_a.should == categories(:daily).entries.published.to_a
+      render[:ivars][:@entries].to_a.should == category.entries.reload.published.to_a
       render[:ivars][:@entries].current_page.should == 1
     end
 
@@ -121,14 +132,22 @@ describe Days::App, type: :controller do
   end
 
   describe "GET /" do
-    fixtures :categories, :entries
     subject { get '/', params }
     let(:params) { {} }
+
+    before do
+      Days::Entry.create!(title: '1', body: 'a', published_at: Time.local(2012, 11, 15, 0, 0, 0))
+      Days::Entry.create!(title: '2', body: 'a', published_at: Time.local(2012, 12, 25, 0, 0, 0))
+    end
+
+    let!(:draft) do
+      Days::Entry.create!(title: '3', body: 'a', draft: true)
+    end
 
     it "renders entries" do
       render[:data].should == :entries
       render[:ivars][:@entries].current_page.should == 1
-      render[:ivars][:@entries].should_not include(entries(:entry_draft))
+      render[:ivars][:@entries].should_not include(draft)
     end
 
     context "with page param" do
@@ -142,7 +161,6 @@ describe Days::App, type: :controller do
   end
 
   describe "GET /feed" do
-    fixtures :categories, :entries
     subject { get '/feed' }
 
     it { should be_ok }
