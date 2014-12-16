@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe Days::App, type: :controller do
   describe "admin: categories" do
-    fixtures :users, :categories
-    let(:user)  { users(:blogger) }
-    let(:category) { categories(:daily) }
+    let(:user)  { Days::User.create!(login_name: 'blogger', name: 'blogger', password: 'x', password_confirmation: 'x') }
+    let!(:category) { Days::Category.create!(name: 'daily') }
 
     before { login(user) }
 
@@ -19,7 +18,7 @@ describe Days::App, type: :controller do
         render[:data].should == :'admin/categories'
 
         categories = render[:ivars][:@categories]
-        categories.should == Days::Category.all
+        categories.to_a.should == [category]
       end
     end
 
@@ -73,7 +72,7 @@ describe Days::App, type: :controller do
       end
 
       context "with invalid category" do
-        let(:category) { double.tap { |_| _.stub(id: Days::Category.last.id.succ) } }
+        before { category.destroy }
 
         it { should be_not_found }
       end
@@ -91,7 +90,7 @@ describe Days::App, type: :controller do
       end
 
       context "with invalid category" do
-        let(:category) { double.tap { |_| _.stub(id: Days::Category.last.id.succ) } }
+        before { category.destroy }
 
         it { should be_not_found }
       end
