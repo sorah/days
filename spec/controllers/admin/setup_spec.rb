@@ -3,7 +3,12 @@ require 'spec_helper'
 describe Days::App, type: :controller do
   shared_examples "an setup page" do
     context "when user exists" do
-      fixtures :users
+      before do
+        Days::User.create!(
+          name: 'Blogger', login_name: 'blogger',
+          password: 'password', password_confirmation: 'password'
+        )
+      end
 
       it "denies access" do
         subject.status.should == 403
