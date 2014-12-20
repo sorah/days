@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe Days::App, type: :controller do
   describe "admin: entries" do
-    fixtures :users, :categories, :entries
-    let(:entry) { entries(:entry_one) }
-    let(:user)  { users(:blogger) }
+    let!(:entry) { Days::Entry.create!(title: 'foo', body: 'foo') }
+    let(:user)  { Days::User.create!(login_name: 'blogger', name: 'blogger', password: 'x', password_confirmation: 'x') }
 
     before { login(user) }
 
@@ -49,6 +48,7 @@ describe Days::App, type: :controller do
       it "creates entry" do
         subject.should be_redirect
 
+        entry = Days::Entry.last
         entry.title.should == "Hello"
         entry.body.should == "World"
         entry.user.should == user
@@ -83,6 +83,7 @@ describe Days::App, type: :controller do
 
         it "creates entry with categories" do
           subject
+          entry = Days::Entry.last
           entry.categories.reload.map(&:id).should == Days::Category.pluck(:id)
         end
       end
@@ -99,7 +100,7 @@ describe Days::App, type: :controller do
       end
 
       context "with invalid entry" do
-        let(:entry) { double.tap { |_| _.stub(id: Days::Entry.last.id.succ) } }
+        before { entry.destroy }
 
         it { should be_not_found }
       end
@@ -119,7 +120,7 @@ describe Days::App, type: :controller do
 
         entry.reload
         entry.title.should == 'New'
-        entry.body.should == 'a rainy day'
+        entry.body.should == 'foo'
       end
 
       context "when invalid" do
@@ -132,23 +133,26 @@ describe Days::App, type: :controller do
           ientry = render[:ivars][:@entry]
           ientry.id.should == entry.id
           ientry.title.should == 'New'
-          entry.title.should == 'Today was'
+
+          entry.reload
+          entry.title.should == 'foo'
         end
       end
 
       context "with category" do
+        let(:category) { Days::Category.create!(name: 'daily') }
         let(:params) do
-          {entry: {categories: {categories(:rainy).id.to_s => '1'}}}
+          {entry: {categories: {category.id.to_s => '1'}}}
         end
 
         it "creates entry with categories" do
           subject.should be_redirect
-          entry.categories.reload.map(&:id).should == [categories(:rainy).id]
+          entry.reload.categories.reload.map(&:id).should == [category.id]
         end
       end
 
       context "with invalid entry" do
-        let(:entry) { double.tap { |_| _.stub(id: Days::Entry.last.id.succ) } }
+        before { entry.destroy }
 
         it { should be_not_found }
       end
@@ -166,7 +170,7 @@ describe Days::App, type: :controller do
       end
 
       context "with invalid entry" do
-        let(:entry) { double.tap { |_| _.stub(id: Days::Entry.last.id.succ) } }
+        before { entry.destroy }
 
         it { should be_not_found }
       end
