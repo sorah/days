@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe Days::App, type: :controller do
   describe "admin: users" do
-    fixtures :users
-    let(:user)  { users(:blogger) }
+    let(:user) { Days::User.create!(login_name: 'blogger', name: 'blogger', password: 'x', password_confirmation: 'x') }
 
     before { login(user) }
 
@@ -39,7 +38,6 @@ describe Days::App, type: :controller do
 
     describe "POST /admin/users" do
       subject { post '/admin/users', params, env }
-      let(:user) { Days::User.last }
       let(:user_params) do
         {
           name: "Writer", login_name: "writer",
@@ -86,7 +84,8 @@ describe Days::App, type: :controller do
       end
 
       context "with invalid user" do
-        let(:user) { double.tap { |_| _.stub(id: Days::User.last.id.succ) } }
+        let(:user2) { Days::User.create!(login_name: 'blogger2', name: 'blogger2', password: 'x', password_confirmation: 'x') }
+        before { login(user2); user.destroy }
 
         it { should be_not_found }
       end
@@ -122,14 +121,15 @@ describe Days::App, type: :controller do
       end
 
       context "with invalid user" do
-        let(:user) { double.tap { |_| _.stub(id: Days::User.last.id.succ) } }
+        let(:user2) { Days::User.create!(login_name: 'blogger2', name: 'blogger2', password: 'x', password_confirmation: 'x') }
+        before { login(user2); user.destroy }
 
         it { should be_not_found }
       end
     end
 
     describe "DELETE /admin/users/:id" do
-      let(:another_user) { users(:writer) }
+      let!(:another_user) { Days::User.create!(login_name: 'blogger2', name: 'blogger2', password: 'x', password_confirmation: 'x') }
       subject { delete "/admin/users/#{another_user.id}", {}, env }
 
       it_behaves_like 'an admin page'
@@ -153,8 +153,7 @@ describe Days::App, type: :controller do
       end
 
       context "with invalid user" do
-        subject { delete "/admin/users/#{user.id}", {}, env }
-        let(:user) { users(:blogger).tap(&:destroy) }
+        before { another_user.destroy }
 
         it { should be_not_found }
       end
