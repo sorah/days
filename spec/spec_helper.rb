@@ -126,7 +126,7 @@ RSpec.configure do |config|
 
   config.after(:each) do
     %i(categories_entries categories entries users).each do |x|
-      Sequel::Model.db.from(x).truncate
+      config.days_config.db.from(x).truncate
     end
   end
 
