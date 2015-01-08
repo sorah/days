@@ -1,6 +1,7 @@
 require 'active_record'
 require 'stringex'
 require 'redcarpet'
+require 'days/models/base'
 
 module Days
   class Entry < ActiveRecord::Base
@@ -60,6 +61,19 @@ module Days
         :no_intra_emphasis => true, :fenced_code_blocks => true,
         :tables => true, :superscript => true)
       self.rendered = markdown.render(self.body)
+    end
+  end
+
+  module Models
+    class Entry < Base
+      many_to_one :user
+      many_to_many :categories
+
+      def validate
+        self
+        validates_unique :slug
+        validates_presence %i(title body rendered slug)
+      end
     end
   end
 end
