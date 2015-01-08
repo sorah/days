@@ -3,6 +3,7 @@ require 'active_record'
 require 'logger'
 require 'settingslogic'
 require 'sequel'
+require 'days/models/base'
 
 module Days
   class Config < Settingslogic
@@ -61,6 +62,8 @@ module Days
     end
 
     def establish_db_connection(force=false)
+      Days::Models::Base.db = self.db
+
       if Days::App.environment.to_sym == :development && (self.has_key?(:activerecord_log) ? self.activerecord_log == true : true)
         ActiveRecord::Base.logger = Logger.new($stdout)
       end
