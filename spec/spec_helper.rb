@@ -4,7 +4,6 @@ require 'days/models'
 require 'days/migrator'
 require 'rack/test'
 require 'active_record'
-require 'active_record/fixtures'
 require 'active_support/test_case'
 require 'pry'
 
@@ -90,22 +89,6 @@ module SetupAndTeardown
   end
 end
 
-module FixturesAdapter
-  extend ActiveSupport::Concern
-  include SetupAndTeardown
-  include ActiveRecord::TestFixtures
-
-  included do
-    self.fixture_path = "#{File.dirname(__FILE__)}/fixtures"
-    self.use_transactional_fixtures = false
-    self.use_instantiated_fixtures  = true
-
-    self.fixture_class_names = Hash.new do |h, table_name|
-        h[table_name] = "Days::#{ActiveRecord::Fixtures.find_table_name(table_name)}"
-    end
-  end
-end
-
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
@@ -131,7 +114,6 @@ RSpec.configure do |config|
   end
 
   config.include AppSpecHelper, type: :controller
-  config.include FixturesAdapter
 
   config.tty = true
 end
