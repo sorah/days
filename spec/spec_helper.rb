@@ -4,7 +4,6 @@ require 'days/models'
 require 'days/migrator'
 require 'rack/test'
 require 'active_record'
-require 'active_support/test_case'
 require 'database_rewinder'
 require 'pry'
 
