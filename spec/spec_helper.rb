@@ -107,11 +107,6 @@ RSpec.configure do |config|
     ActiveRecord::Base.logger = nil
   end
 
-  config.after(:each) do
-    %i(categories_entries categories entries users).each do |x|
-      config.days_config.db.from(x).truncate
-    end
-  end
 
   config.include AppSpecHelper, type: :controller
 
