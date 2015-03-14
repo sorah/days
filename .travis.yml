@@ -15,6 +15,9 @@ notifications:
   email:
     - travis-ci@sorah.jp
 
+before_install:
+  - gem i bundler -v 1.8.4
+
 script:
   - '[ -e spec/environment/db/test.sqlite3 ] && rm spec/environment/db/test.sqlite3 || :'
   - bundle exec rspec -fd spec

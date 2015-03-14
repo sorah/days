@@ -1,10 +1,11 @@
 ENV["RACK_ENV"] ||= 'test'
+require 'active_record'
+require 'database_rewinder'
 require 'days'
 require 'days/models'
 require 'days/migrator'
 require 'rack/test'
-require 'active_record'
-require 'database_rewinder'
+
 require 'pry'
 
 Days::App.set :environment, :test
