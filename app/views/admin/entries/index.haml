@@ -1,31 +1,34 @@
 .container
-  %h1 Entries
+  .row
+    %h1 Entries
 
-  %nav
-    %a.btn.btn-primary{href: '/admin/entries/new'} New Entry
+  .row
+    %nav
+      %a.btn.btn-primary{href: '/admin/entries/new'} New Entry
 
-  %table.table.table-hover
-    %thead
-      %tr
-        %th Title
-        %th Published at
-        %th Actions
-    %tbody
-      - @entries.each do |entry|
+  .row
+    %table.table.table-hover.table-vertical-aligned
+      %thead
         %tr
-          %td{style: 'width: 60%'}
-            %a{href: "/admin/entries/#{entry.id}"}= entry.title
-          %td
-            - if entry.published_at
-              = entry.published_at
-            - else
-              %span.label.label-info Draft
-            - if entry.scheduled?
-              %span.label.label-success Scheduled
-          %td
-            %a.btn.btn-small{href: "/admin/entries/#{entry.id}"} Edit
-            %a.btn.btn-small{href: entry_path(entry), class: entry.published? ? '' : 'disabled'} Show
-            %form.form-inline.inlm{action: "/admin/entries/#{entry.id}", method: "POST"}
-              != csrf_tag
-              %input{type: 'hidden', name: '_method', value: 'DELETE'}
-              %button.btn.btn-small.btn-danger{type: 'submit'} Delete
+          %th Title
+          %th Published at
+          %th Actions
+      %tbody
+        - @entries.each do |entry|
+          %tr
+            %td{style: 'width: 60%'}
+              %a{href: "/admin/entries/#{entry.id}"}= entry.title
+            %td
+              - if entry.published_at
+                = entry.published_at
+              - else
+                %span.label.label-info Draft
+              - if entry.scheduled?
+                %span.label.label-success Scheduled
+            %td
+              %a.btn.btn-default.btn-small{href: "/admin/entries/#{entry.id}"} Edit
+              %a.btn.btn-default.btn-small{href: entry_path(entry), class: entry.published? ? '' : 'disabled'} Show
+              %form.form-inline.inlm{action: "/admin/entries/#{entry.id}", method: "POST", onsubmit: 'javascript:return confirm("Are you sure?")'}
+                != csrf_tag
+                %input{type: 'hidden', name: '_method', value: 'DELETE'}
+                %button.btn.btn-small.btn-danger{type: 'submit'} Delete

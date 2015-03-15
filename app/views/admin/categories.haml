@@ -1,7 +1,7 @@
 .container
   %h1 Categories
 
-  %table.table.table-hover#categories
+  %table.table.table-hover.table-vertical-aligned#categories
     %thead
       %tr
         %th Name
@@ -14,7 +14,7 @@
             %form.form-inline.inlm{action: "/admin/categories/#{category.id}", method: 'POST'}
               != csrf_tag
               %input{type: 'hidden', name: '_method', value: 'PUT'}
-              %input.input-small{type: 'text', name: 'category[name]', placeholder: 'Name', value: category.name}
+              %input.form-control.input-small{type: 'text', name: 'category[name]', placeholder: 'Name', value: category.name}
               %button.btn.btn-small.btn-primary{type: 'submit'} Save
               %button.btn.btn-small.cancel Cancel
           %td
@@ -25,7 +25,7 @@
             %button.btn.btn-small.category-edit Edit
   %form.form-inline#category_add{action: '/admin/categories', method: 'POST'}
     != csrf_tag
-    %input.input-small{type: 'text', name: 'category[name]', placeholder: 'Name'}
+    %input.form-control.input-small{type: 'text', name: 'category[name]', placeholder: 'Name'}
     %button.btn.btn-primary{type: 'submit'} Add
     %span.help-block{style: 'display: none;'} We recommend to use lowercase for category name; Because currently we use category name directly for category page. (/category/...)
 

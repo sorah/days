@@ -43,9 +43,9 @@
                 %input{type: 'checkbox', name: "entry[categories][#{category.id}]", value: '1', checked: @entry.categories.include?(category)}
                 = category.name
 
-  .row
-    .col-md-12
-      %button.btn.btn-primary{type: 'submit'} Save
+    .row
+      .col-md-12
+        %button.btn.btn-primary{type: 'submit'} Save
 
 :javascript
   jQuery(function ($) {
