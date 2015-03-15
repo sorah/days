@@ -49,9 +49,9 @@ module AppSpecHelper
         ActiveRecord::Base.logger = nil
       end
 
-      before(:each) do
+      before(:example) do |example|
         @renders = []
-        unless self.example.metadata[:render]
+        unless example.metadata[:render]
           allow_any_instance_of(Days::App).to receive(:render) do |instance, *args, &block|
             @renders << {engine: args[0], data: args[1], options: args[2] || {}, locals: args[3] || {}, ivars: args[4] || {}}
             ""
