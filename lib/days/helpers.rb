@@ -63,12 +63,12 @@ module Days
 
         return nil if match[:slug]   && match[:slug]        != entry.slug
         return nil if match[:id]     && match[:id].to_i     != entry.id
-        return nil if match[:year]   && match[:year].to_i   != published_at.year
-        return nil if match[:month]  && match[:month].to_i  != published_at.month
-        return nil if match[:day]    && match[:day].to_i    != published_at.day
-        return nil if match[:hour]   && match[:hour].to_i   != published_at.hour
-        return nil if match[:minute] && match[:minute].to_i != published_at.min
-        return nil if match[:second] && match[:second].to_i != published_at.sec
+        return nil if match[:year]   && match[:year].to_i   != published_at.localtime.year
+        return nil if match[:month]  && match[:month].to_i  != published_at.localtime.month
+        return nil if match[:day]    && match[:day].to_i    != published_at.localtime.day
+        return nil if match[:hour]   && match[:hour].to_i   != published_at.localtime.hour
+        return nil if match[:minute] && match[:minute].to_i != published_at.localtime.min
+        return nil if match[:second] && match[:second].to_i != published_at.localtime.sec
 
         return entry
       else
