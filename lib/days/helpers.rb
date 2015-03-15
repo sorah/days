@@ -38,8 +38,12 @@ module Days
       config.permalink.gsub(/{(\w+?)}/) { hash[$1.to_sym] }
     end
 
+    def self.lookup_entry_regexp_for(permalink_format)
+      (@lookup_entry_regexp_cache ||= {})[permalink_format] ||= Regexp.compile(Regexp.escape(permalink_format).gsub(/\\{(\w+?)\\}/) { "(?<#{$1}>.+?)" } + "$")
+    end
+
     def lookup_entry(path)
-      regexp = Regexp.compile(Regexp.escape(config.permalink).gsub(/\\{(\w+?)\\}/) { "(?<#{$1}>.+?)" } + "$")
+      regexp = Helpers.lookup_entry_regexp_for(config.permalink)
       m = regexp.match(path)
       return nil unless m
 
