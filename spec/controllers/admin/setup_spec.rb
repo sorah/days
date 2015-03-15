@@ -11,7 +11,7 @@ describe Days::App, type: :controller do
       end
 
       it "denies access" do
-        subject.status.should == 403
+        expect(subject.status).to eq(403)
       end
     end
   end
@@ -27,13 +27,13 @@ describe Days::App, type: :controller do
           Days::User.destroy_all
         end
 
-        it { should be_ok }
+        it { is_expected.to be_ok }
 
         it "renders form page" do
-          render[:data].should == :'admin/setup'
+          expect(render[:data]).to eq(:'admin/setup')
           user = render[:ivars][:@user]
-          user.should be_a(Days::User)
-          user.should be_new_record
+          expect(user).to be_a(Days::User)
+          expect(user).to be_new_record
         end
       end
     end
@@ -55,33 +55,33 @@ describe Days::App, type: :controller do
         it "creates user" do
           expect { subject }.to change { Days::User.count }.from(0).to(1)
           user = Days::User.last
-          user.name.should == "Newbie"
+          expect(user.name).to eq("Newbie")
         end
 
         it "logs in" do
-          session[:user_id].should be_nil
+          expect(session[:user_id]).to be_nil
           subject
-          session[:user_id].should == Days::User.last.id
+          expect(session[:user_id]).to eq(Days::User.last.id)
         end
 
         it "redirects to /admin" do
-          subject.should be_redirect
-          URI.parse(subject.location).path.should == '/admin'
+          expect(subject).to be_redirect
+          expect(URI.parse(subject.location).path).to eq('/admin')
         end
 
         context "when user is invalid" do
           before do
-            Days::User.any_instance.stub(:valid? => false, :save => false)
+            allow_any_instance_of(Days::User).to receive_messages(:valid? => false, :save => false)
           end
 
-          specify { subject.status.should == 406 } # not acceptable
+          specify { expect(subject.status).to eq(406) } # not acceptable
 
           it "renders form" do
-            render[:data].should == :'admin/setup'
+            expect(render[:data]).to eq(:'admin/setup')
             iuser = render[:ivars][:@user]
-            iuser.should be_a_new_record
-            iuser.name.should == 'Newbie'
-            iuser.login_name.should == 'newbie'
+            expect(iuser).to be_a_new_record
+            expect(iuser.name).to eq('Newbie')
+            expect(iuser.login_name).to eq('newbie')
           end
         end
       end

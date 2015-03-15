@@ -12,13 +12,13 @@ describe Days::App, type: :controller do
 
       it_behaves_like 'an admin page'
 
-      it { should be_ok }
+      it { is_expected.to be_ok }
 
       it "lists up categories" do
-        render[:data].should == :'admin/categories'
+        expect(render[:data]).to eq(:'admin/categories')
 
         categories = render[:ivars][:@categories]
-        categories.to_a.should == [category]
+        expect(categories.to_a).to eq([category])
       end
     end
 
@@ -29,20 +29,21 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "creates category" do
-        subject.should be_redirect
+        expect(subject).to be_redirect
 
-        Days::Category.last.name.should == params[:category][:name]
+        expect(Days::Category.last.name).to eq(params[:category][:name])
       end
 
       context "when category is invalid" do
         before do
-          Days::Category.any_instance.stub(:valid? => false, :save => false)
+          allow_any_instance_of(Days::Category).to receive(:valid?).and_return(false)
+          allow_any_instance_of(Days::Category).to receive(:save).and_return(false)
         end
 
-        specify { subject.status.should == 406 } # not acceptable
+        specify { expect(subject.status).to eq(406) } # not acceptable
 
         it "renders form" do
-          render[:data].should == :'admin/categories'
+          expect(render[:data]).to eq(:'admin/categories')
         end
       end
     end
@@ -54,27 +55,27 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "updates category" do
-        subject.should be_redirect
-        URI.parse(subject['Location']).path.should == '/admin/categories'
+        expect(subject).to be_redirect
+        expect(URI.parse(subject['Location']).path).to eq('/admin/categories')
 
         category.reload
-        category.name.should == 'Storm'
+        expect(category.name).to eq('Storm')
       end
 
       context "when invalid" do
         before do
-          Days::Category.any_instance.stub(:valid? => false, :save => false)
+          allow_any_instance_of(Days::Category).to receive_messages(:valid? => false, :save => false)
         end
 
         it "renders form" do
-          render[:data].should == :'admin/categories'
+          expect(render[:data]).to eq(:'admin/categories')
         end
       end
 
       context "with invalid category" do
         before { category.destroy }
 
-        it { should be_not_found }
+        it { is_expected.to be_not_found }
       end
     end
 
@@ -85,14 +86,14 @@ describe Days::App, type: :controller do
 
       it "destroys category" do
         expect { subject }.to change { Days::Category.where(id: category.id).count }.from(1).to(0)
-        subject.should be_redirect
-        URI.parse(subject.location).path.should == "/admin/categories"
+        expect(subject).to be_redirect
+        expect(URI.parse(subject.location).path).to eq("/admin/categories")
       end
 
       context "with invalid category" do
         before { category.destroy }
 
-        it { should be_not_found }
+        it { is_expected.to be_not_found }
       end
     end
   end
