@@ -17,9 +17,9 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency "sinatra", '~> 1.3.3'
+  gem.add_dependency "sinatra", '~> 1.4.5'
   gem.add_dependency "thor", '~> 0.16.0'
-  gem.add_dependency "rack_csrf", '~> 2.4.0'
+  gem.add_dependency "rack_csrf", '~> 2.5.0'
 
   gem.add_dependency "settingslogic", '~> 2.0.9'
 
