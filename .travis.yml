@@ -13,8 +13,8 @@ matrix:
     - rvm: "ruby-head"
 
 notifications:
-  email:
-    - travis-ci@sorah.jp
+  slack:
+    secure: YA641QLW/evxS0VerCPI/EIEkW45QingXAwSH7tT6kycvxGi1ZH9cLV7imq5swtcCbyISGS3C14oMQHw8rzZLvc/TA2xnG+iv8kqQUMBr1UGlj8F9TniZGQT6XKHEvED/YP9IDaGBiiQpAtMLx/yISlnnIFfj4pTCCBfRERUgr4=
 
 before_install:
   - gem i bundler -v 1.8.4
