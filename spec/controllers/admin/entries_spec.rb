@@ -18,7 +18,7 @@ describe Days::App, type: :controller do
         expect(render[:data]).to eq(:'admin/entries/index')
 
         entries = render[:ivars][:@entries]
-        expect(entries).to eq(Days::Entry.order('id DESC').all)
+        expect(entries).to eq(Days::Entry.order(id: :desc).page(nil))
       end
     end
 
