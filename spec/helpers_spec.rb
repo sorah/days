@@ -11,7 +11,7 @@ describe Days::Helpers do
   end
 
   let!(:entry_a) do
-    Days::Entry.create(
+    Days::Entry.create!(
       title: 'Sushi', body: 'Sushi!',
       published_at: Time.local(2012, 12, 31, 9, 24, 42),
       slug: "sushi"
@@ -19,7 +19,7 @@ describe Days::Helpers do
   end
 
   let!(:entry_b) do
-    Days::Entry.create(
+    Days::Entry.create!(
       title: 'Neko', body: 'Meow!',
       published_at: Time.local(2012, 12, 31, 19, 14, 32),
       slug: "neko"

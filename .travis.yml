@@ -1,5 +1,6 @@
 language: ruby
 cache: bundler
+sudo: false
 
 rvm:
   - 2.1
@@ -9,11 +10,14 @@ rvm:
 matrix:
   fast_finish: true
   allow_failures:
-    - "ruby-head"
+    - rvm: "ruby-head"
 
 notifications:
   email:
     - travis-ci@sorah.jp
+
+before_install:
+  - gem i bundler -v 1.8.4
 
 script:
   - '[ -e spec/environment/db/test.sqlite3 ] && rm spec/environment/db/test.sqlite3 || :'

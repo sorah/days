@@ -5,8 +5,6 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  sequel:
-    url: sqlite://spec/environment/db/development.sqlite3
   database:
     adapter: sqlite3
     database: db/development.sqlite3
@@ -15,8 +13,6 @@ development:
 
 test:
   <<: *defaults
-  sequel:
-    url: sqlite://spec/environment/db/test.sqlite3
   database:
     adapter: sqlite3
     database: db/test.sqlite3
@@ -25,9 +21,6 @@ test:
 
 production:
   <<: *defaults
-  sequel:
-    url: 'mysql2://localhost/days_production'
-    encoding: utf8
   database:
     adapter: mysql2
     encoding: utf8

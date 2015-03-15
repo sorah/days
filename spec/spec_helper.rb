@@ -1,10 +1,11 @@
 ENV["RACK_ENV"] ||= 'test'
+require 'active_record'
+require 'database_rewinder'
 require 'days'
 require 'days/models'
 require 'days/migrator'
 require 'rack/test'
-require 'active_record'
-require 'active_support/test_case'
+
 require 'pry'
 
 Days::App.set :environment, :test
@@ -102,15 +103,16 @@ RSpec.configure do |config|
   config.before(:suite) do
     Days::App.environment = ENV["RACK_ENV"] || :test
     config.days_config.establish_db_connection()
-    Days::Migrator.start(config.days_config, verbose: true)
     ActiveRecord::Base.configurations = {'test' => Hash[config.days_config.database]}
+
+    Days::Migrator.start(config.days_config, verbose: true)
     ActiveRecord::Base.logger = nil
+
+    DatabaseRewinder.clean_all
   end
 
   config.after(:each) do
-    %i(categories_entries categories entries users).each do |x|
-      config.days_config.db.from(x).truncate
-    end
+    DatabaseRewinder.clean
   end
 
   config.include AppSpecHelper, type: :controller
