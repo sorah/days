@@ -1,7 +1,7 @@
 require 'days/models/base'
 
 module Days
-  class User < ActiveRecord::Base
+  class User < Days::Models::Base
     has_secure_password
 
     attr_accessible :login_name, :name, :password, :password_confirmation

@@ -3,7 +3,7 @@ require 'stringex'
 require 'redcarpet'
 
 module Days
-  class Entry < ActiveRecord::Base
+  class Entry < Days::Models::Base
     attr_accessible :title, :body, :slug, :published_at, :categories, :user, :draft, :old_path
 
     validates_uniqueness_of :slug
