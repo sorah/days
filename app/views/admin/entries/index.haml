@@ -32,3 +32,5 @@
                 != csrf_tag
                 %input{type: 'hidden', name: '_method', value: 'DELETE'}
                 %button.btn.btn-small.btn-danger{type: 'submit'} Delete
+  .row
+    != paginate @entries
