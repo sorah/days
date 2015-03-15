@@ -52,7 +52,6 @@ module Days
         hash
       end
 
-
       if match[:id] || match[:slug]
         if match[:id]
           entry = Entry.find(match[:id])
