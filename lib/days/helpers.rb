@@ -51,12 +51,11 @@ module Days
 
       if match[:id] || match[:slug]
         if match[:id]
-          query = Entry.where(id: match[:id])
+          entry = Entry.find(match[:id])
         else
-          query = Entry.where(slug: match[:slug])
+          entry = Entry.find_by(slug: match[:slug])
         end
 
-        entry = query.first
         return nil unless entry
         published_at = entry.published_at
         return nil unless published_at

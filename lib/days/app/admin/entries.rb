@@ -36,14 +36,14 @@ module Days
     end
 
     get "/admin/entries/:id", :admin_only => true do
-      @entry = Entry.where(id: params[:id]).first || halt(404)
+      @entry = Entry.find_by(id: params[:id]) || halt(404)
       @categories = Category.all
       haml :'admin/entries/form', layout: :admin
     end
 
     put "/admin/entries/:id", :admin_only => true do
       entry = params[:entry] || halt(400)
-      @entry = Entry.where(id: params[:id]).first || halt(404)
+      @entry = Entry.find_by(id: params[:id]) || halt(404)
 
       entry[:categories] = Category.where(
         id: (entry[:categories] || {}).keys.map(&:to_i)
@@ -60,7 +60,7 @@ module Days
     end
 
     delete "/admin/entries/:id", :admin_only => true do
-      @entry = Entry.where(id: params[:id]).first || halt(404)
+      @entry = Entry.find_by(id: params[:id]) || halt(404)
       @entry.destroy
 
       redirect "/admin/entries"

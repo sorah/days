@@ -20,7 +20,7 @@ module Days
         end
       end
 
-      entry = Entry.where(old_path: request.path).first
+      entry = Entry.find_by(old_path: request.path)
       if entry
         return [301, {'Location' => entry_path(entry)}, ""]
       end
@@ -32,7 +32,7 @@ module Days
     end
 
     get '/category/:name' do
-      category = Category.where(name: params[:name]).first || halt(404)
+      category = Category.find_by(name: params[:name]) || halt(404)
       @entries = category.entries.published.page(params[:page] || 1)
       haml :entries
     end
