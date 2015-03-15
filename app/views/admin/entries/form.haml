@@ -1,11 +1,11 @@
 .container
   - action = @entry.new_record? ? "/admin/entries" : "/admin/entries/#{@entry.id}"
   %form.form{action: action, method: "POST"}
-    .row-fluid
-      .span8
+    .row
+      .col-md-8
         != csrf_tag
         - unless @entry.new_record?
-          %input.input-block-level{type: 'hidden', name: '_method', value: "PUT"}
+          %input.form-control{type: 'hidden', name: '_method', value: "PUT"}
         %p
           %legend
             - if @entry.new_record?
@@ -13,34 +13,39 @@
             - else
               Editing Entry:
               %a{href: entry_path(@entry)}= @entry.title
-          %input.entry-title.input-block-level{type: 'text', name: 'entry[title]', placeholder: "Title", value: @entry.title}
-          %textarea.input-block-level{name: 'entry[body]', rows: 20}= @entry.body
-      .span4
+        %p
+          %input.entry-title.form-control{type: 'text', name: 'entry[title]', placeholder: "Title", value: @entry.title}
+        %p
+          %textarea.form-control{name: 'entry[body]', rows: 20}= @entry.body
+      .col-md-4
         %p
           %legend Permalink
-          %input.input-block-level{type: 'text', name: 'entry[slug]', placeholder: "Slug (optional)", value: @entry.slug}
+          %input.form-control{type: 'text', name: 'entry[slug]', placeholder: "Slug (optional)", value: @entry.slug}
           %p
             - if @entry.published_at
               Published at:
               %a{href: entry_path(@entry)} #{request.host_with_port}#{entry_path(@entry)}
         %p
           %legend Publishing options
-          %label.checkbox
-            %input{type: 'hidden', name: "entry[draft]", value: ''}
-            %input#draft_checkbox{type: 'checkbox', name: "entry[draft]", value: '1', checked: !@entry.new_record? && @entry.published_at.nil?}
-            Draft
+          .checkbox
+            %label
+              %input{type: 'hidden', name: "entry[draft]", value: ''}
+              %input#draft_checkbox{type: 'checkbox', name: "entry[draft]", value: '1', checked: !@entry.new_record? && @entry.published_at.nil?}
+              Draft
           #published_at_box{style: @entry.draft? && 'display: none'}
-            %input.input-block-level{type: 'text', name: 'entry[published_at]', placeholder: "Published time (optional)", value: @entry.published_at}
+            %input.form-control{type: 'text', name: 'entry[published_at]', placeholder: "Published time (optional)", value: @entry.published_at}
             %span.help-block When you specified datetime in future, entry will be published after that time.
         %p
           %legend Categories
           - @categories.each do |category|
-            %label.checkbox
-              %input{type: 'checkbox', name: "entry[categories][#{category.id}]", value: '1', checked: @entry.categories.include?(category)}
-              = category.name
+            .checkbox
+              %label
+                %input{type: 'checkbox', name: "entry[categories][#{category.id}]", value: '1', checked: @entry.categories.include?(category)}
+                = category.name
 
-    .form-actions
-      %button.btn.btn-primary{type: 'submit'} Save
+    .row
+      .col-md-12
+        %button.btn.btn-primary{type: 'submit'} Save
 
 :javascript
   jQuery(function ($) {

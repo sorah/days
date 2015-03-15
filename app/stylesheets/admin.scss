@@ -26,3 +26,7 @@ input.entry-title[type="text"]{
   font-size: 1.6em;
   height: auto;
 }
+
+.table-vertical-aligned.table > tbody > tr > td {
+     vertical-align: middle;
+}

@@ -11,16 +11,14 @@ body {
   margin-right: auto;
   padding: 20px 20px;
 
-  border-radius: 5px;
+  border-radius: 10px;
 
   h2 {
     margin-top: 0;
     margin-bottom: 10px;
   }
 
-  input.input-block-level {
-    font-size: 18px;
-    height: auto;
-    padding: 7px 9px;
+  button {
+    width: 100%;
   }
 }

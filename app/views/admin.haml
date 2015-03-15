@@ -3,35 +3,45 @@
   %head
     %meta{charset: 'UTF-8'}
     %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
-    %link{href: "/assets/bootstrap.min.css", rel: "stylesheet"}
+    %link{href: "/assets/admin/bootstrap.min.css", rel: "stylesheet"}
     %link{href: "/assets/admin.css", rel: "stylesheet", media: "screen"}
-    %link{href: "/assets/bootstrap-responsive.min.css", rel: "stylesheet"}
-    %script{src: '/assets/jquery-1.8.3.min.js'}
-    %script{src: '/assets/bootstrap.min.js'}
+    %script{src: '/assets/jquery-2.1.3.min.js'}
+    %script{src: '/assets/admin/bootstrap.min.js'}
     - if @title
       %title #{@title} - Days Admin
     - else
       %title Days Admin
   %body
-    .navbar.navbar-inverse.navbar-fixed-top
-      .navbar-inner
-        .container
-          %a.btn.btn-navbar{data: {toggle: 'collapse', target: '.nav-collapse'}}
+    %nav.navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          %button.navbar-toggle.collapsed{type: 'button', data: {toggle: 'collapse', target: '#navbar-collapse-1'}}
+            %span.sr-only Toggle navigation
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand{href: '/admin/'} Days
-          %form.navbar-form.pull-right{action: "/admin/logout", method: "POST"}
-            != csrf_tag
-            %button.btn.btn-link{type: 'submit'} Log out
-            %a.btn.btn-primary{href: '/admin/entries/new'} New Entry
 
-          %div.nav-collapse.collapse
-            %ul.nav
-              %li
-                %a{href: '/admin/entries'} Entries
-              %li
-                %a{href: '/admin/categories'} Categories
-              %li
-                %a{href: '/admin/users'} Users
+          %a.navbar-brand{href: '/admin/'} Days
+
+        %form.navbar-form.navbar-right.hidden-xs{action: "/admin/logout", method: "POST"}
+          != csrf_tag
+          %button.btn.btn-link{type: 'submit'} Log out
+          %a.btn.btn-default{href: '/admin/entries/new'} New Entry
+
+        %div.collapse.navbar-collapse#navbar-collapse-1
+          %ul.nav.navbar-nav
+            %li.visible-xs
+              %form
+                %a.btn.btn-default.visible-xs{href: '/admin/entries/new'} New Entry
+            %li
+              %a{href: '/admin/entries'} Entries
+            %li
+              %a{href: '/admin/categories'} Categories
+            %li
+              %a{href: '/admin/users'} Users
+            %li.visible-xs
+              %form.form-inline{action: "/admin/logout", method: "POST"}
+                != csrf_tag
+                %button.btn.btn-link{type: 'submit'} Log out
+
     != yield
