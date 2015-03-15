@@ -5,7 +5,7 @@ require 'rack/csrf'
 require_relative 'config'
 require_relative 'models'
 require_relative 'helpers'
-require 'haml'
+require 'fast_haml'
 require 'sass'
 
 I18n.load_path.reject! {|_| _.match(/padrino/) }
