@@ -1,4 +1,4 @@
-require 'active_record'
+require 'days/models/base'
 require 'stringex'
 require 'redcarpet'
 

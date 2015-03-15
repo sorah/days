@@ -1,4 +1,4 @@
-require 'active_record'
+require 'days/models/base'
 
 module Days
   class User < ActiveRecord::Base
