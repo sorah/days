@@ -55,7 +55,7 @@ module Days
     desc "server", "Starts the server"
     method_option :config, :type => :string, :aliases => "-c"
     method_option :port, :type => :numeric, :aliases => "-p", :default => 3162
-    method_option :bind, :type => :string, :aliases => "-b", :default => nil
+    method_option :bind, :type => :string, :aliases => "-b", :default => 'localhost'
     method_option :environment, :type => :string, :aliases => "-e", :default => "development"
     method_option :pid, :type => :string, :aliases => "-c"
     def server
