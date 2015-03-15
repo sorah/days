@@ -33,6 +33,12 @@ module Days
       end
     end
 
+    def run_scripts
+      (self[:scripts] || []).each do |_|
+        path = File.expand_path(_, self[:root])
+        instance_eval File.read(path), path, 1
+      end
+    end
 
     def establish_db_connection(force=false, base: ActiveRecord::Base)
       if Days::App.environment.to_sym == :development && (self.has_key?(:activerecord_log) ? self.activerecord_log == true : true)

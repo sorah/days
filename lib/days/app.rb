@@ -104,6 +104,7 @@ module Days
           env.append_path "#{self.root}/images"
         })
         config.establish_db_connection()
+        config.run_scripts()
         x
       end
     end
