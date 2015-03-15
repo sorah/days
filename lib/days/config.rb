@@ -45,6 +45,8 @@ module Days
         base.logger = Logger.new($stdout)
       end
 
+      base.default_timezone = self['database_timezone'] ? self['database_timezone'].to_sym : :local
+
       begin
         raise ActiveRecord::ConnectionNotEstablished if force
         return base.connection
