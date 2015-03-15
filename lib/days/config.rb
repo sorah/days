@@ -1,5 +1,5 @@
 require_relative 'app'
-require 'active_record'
+require 'days/models/base'
 require 'logger'
 require 'settingslogic'
 
@@ -34,16 +34,16 @@ module Days
     end
 
 
-    def establish_db_connection(force=false)
+    def establish_db_connection(force=false, base: ActiveRecord::Base)
       if Days::App.environment.to_sym == :development && (self.has_key?(:activerecord_log) ? self.activerecord_log == true : true)
-        ActiveRecord::Base.logger = Logger.new($stdout)
+        base.logger = Logger.new($stdout)
       end
 
       begin
         raise ActiveRecord::ConnectionNotEstablished if force
-        return ActiveRecord::Base.connection
+        return base.connection
       rescue ActiveRecord::ConnectionNotEstablished
-        ActiveRecord::Base.establish_connection(self['database'] ? Hash[self.database] : ENV["DATABASE_URL"])
+        base.establish_connection(self['database'] ? Hash[self.database] : ENV["DATABASE_URL"])
         retry
       end
     end
