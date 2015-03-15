@@ -52,7 +52,7 @@ module AppSpecHelper
       before(:each) do
         @renders = []
         unless self.example.metadata[:render]
-          Days::App.any_instance.stub(:render) do |*args, &block|
+          allow_any_instance_of(Days::App).to receive(:render) do |instance, *args, &block|
             @renders << {engine: args[0], data: args[1], options: args[2] || {}, locals: args[3] || {}, ivars: args[4] || {}}
             ""
           end
@@ -91,7 +91,6 @@ module SetupAndTeardown
 end
 
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
   # config.order = 'random'
@@ -118,6 +117,17 @@ RSpec.configure do |config|
   config.include AppSpecHelper, type: :controller
 
   config.tty = true
+
+  config.mock_with :rspec do |mocks|
+    # In RSpec 3, `any_instance` implementation blocks will be yielded the receiving
+    # instance as the first block argument to allow the implementation block to use
+    # the state of the receiver.
+    # In RSpec 2.99, to maintain compatibility with RSpec 3 you need to either set
+    # this config option to `false` OR set this to `true` and update your
+    # `any_instance` implementation blocks to account for the first block argument
+    # being the receiving instance.
+    mocks.yield_receiver_to_any_instance_implementation_blocks = true
+  end
 end
 
 require_relative "./shared/admin"

@@ -6,22 +6,22 @@ describe Days::App, type: :controller do
     subject { get path, {}, {} }
 
     before do
-      Days::App.any_instance.should_receive(:lookup_entry).at_least(:once).with(path).and_return(result)
+      expect_any_instance_of(Days::App).to receive(:lookup_entry).at_least(:once).with(path).and_return(result)
     end
 
     let(:result) { Days::Entry.create!(title: 'foo', body: 'foo') }
 
-    it { should be_ok }
+    it { is_expected.to be_ok }
 
     it "renders entry.haml" do
-      render[:data].should == :entry
-      render[:options][:locals][:entry].should == result
+      expect(render[:data]).to eq(:entry)
+      expect(render[:options][:locals][:entry]).to eq(result)
     end
 
     context "when lookup_entry returned nil" do
       let(:result) { nil }
 
-      it { should be_not_found }
+      it { is_expected.to be_not_found }
     end
 
     context "when lookup_entry returned Array" do
@@ -32,11 +32,11 @@ describe Days::App, type: :controller do
         ]
       }
 
-      it { should be_ok }
+      it { is_expected.to be_ok }
 
       it "renders entry.haml" do
-        render[:data].should == :entries
-        render[:ivars][:@entries].should == result
+        expect(render[:data]).to eq(:entries)
+        expect(render[:ivars][:@entries]).to eq(result)
       end
     end
   end
@@ -46,14 +46,14 @@ describe Days::App, type: :controller do
     subject { get path, {}, {} }
 
     before do
-      Days::App.any_instance.stub(lookup_entry: nil)
+      allow_any_instance_of(Days::App).to receive_messages(lookup_entry: nil)
       Days::Entry.create!(title: 'new', body: 'foo', old_path:  '/post/old-path', published_at: Time.local(2012,11,30,0,0,0))
     end
 
     context "when entry not found" do
       let(:path) { '/post/like-old-but-not-exists' }
 
-      it { should be_not_found }
+      it { is_expected.to be_not_found }
     end
 
     context "when entry found by old path" do
@@ -76,31 +76,31 @@ describe Days::App, type: :controller do
       Days::Entry.create!(title: '3', body: 'a', published_at: Time.local(2012, 12, 5, 0, 0, 0))
     end
 
-    it { should be_ok }
+    it { is_expected.to be_ok }
 
     it "renders entries" do
-      render[:data].should == :entries
+      expect(render[:data]).to eq(:entries)
 
       base = Time.local(2012, 12, 1, 0, 0, 0)
       range = (base.beginning_of_month .. base.end_of_month)
-      render[:ivars][:@entries].to_a.should == Days::Entry.where(published_at: range).published.to_a
-      render[:ivars][:@entries].current_page.should == 1
+      expect(render[:ivars][:@entries].to_a).to eq(Days::Entry.where(published_at: range).published.to_a)
+      expect(render[:ivars][:@entries].current_page).to eq(1)
     end
 
     context "with page param" do
       let(:params) { {page: 2} }
 
       it "renders entries" do
-        render[:data].should == :entries
-        render[:ivars][:@entries].current_page.should == 2
+        expect(render[:data]).to eq(:entries)
+        expect(render[:ivars][:@entries].current_page).to eq(2)
       end
     end
 
     context "with character" do
       it "returns not found" do
-        get('/aaa/01').should   be_not_found
-        get('/2012/bbb').should be_not_found
-        get('/aaa/bbb').should  be_not_found
+        expect(get('/aaa/01')).to   be_not_found
+        expect(get('/2012/bbb')).to be_not_found
+        expect(get('/aaa/bbb')).to  be_not_found
       end
     end
   end
@@ -109,24 +109,24 @@ describe Days::App, type: :controller do
     subject { get '/category/cat', params }
     let(:params) { {} }
 
-    it { should be_ok }
+    it { is_expected.to be_ok }
 
     let!(:category) { Days::Category.create!(name: 'cat') }
     let!(:entry) { Days::Entry.create!(title: 'a', body: 'a', categories: [category]) }
 
     it "renders entries" do
-      render[:data].should == :entries
+      expect(render[:data]).to eq(:entries)
 
-      render[:ivars][:@entries].to_a.should == category.entries.reload.published.to_a
-      render[:ivars][:@entries].current_page.should == 1
+      expect(render[:ivars][:@entries].to_a).to eq(category.entries.reload.published.to_a)
+      expect(render[:ivars][:@entries].current_page).to eq(1)
     end
 
     context "with page param" do
       let(:params) { {page: 2} }
 
       it "renders entries" do
-        render[:data].should == :entries
-        render[:ivars][:@entries].current_page.should == 2
+        expect(render[:data]).to eq(:entries)
+        expect(render[:ivars][:@entries].current_page).to eq(2)
       end
     end
   end
@@ -145,17 +145,17 @@ describe Days::App, type: :controller do
     end
 
     it "renders entries" do
-      render[:data].should == :entries
-      render[:ivars][:@entries].current_page.should == 1
-      render[:ivars][:@entries].should_not include(draft)
+      expect(render[:data]).to eq(:entries)
+      expect(render[:ivars][:@entries].current_page).to eq(1)
+      expect(render[:ivars][:@entries]).not_to include(draft)
     end
 
     context "with page param" do
       let(:params) { {page: 2} }
 
       it "renders entries" do
-        render[:data].should == :entries
-        render[:ivars][:@entries].current_page.should == 2
+        expect(render[:data]).to eq(:entries)
+        expect(render[:ivars][:@entries].current_page).to eq(2)
       end
     end
   end
@@ -163,10 +163,10 @@ describe Days::App, type: :controller do
   describe "GET /feed" do
     subject { get '/feed' }
 
-    it { should be_ok }
+    it { is_expected.to be_ok }
 
     specify do
-      subject.content_type.should == 'application/atom+xml'
+      expect(subject.content_type).to eq('application/atom+xml')
     end
   end
 end

@@ -11,13 +11,13 @@ describe Days::App, type: :controller do
 
       it_behaves_like 'an admin page'
 
-      it { should be_ok }
+      it { is_expected.to be_ok }
 
       it "lists up users" do
-        render[:data].should == :'admin/users/index'
+        expect(render[:data]).to eq(:'admin/users/index')
 
         users = render[:ivars][:@users]
-        users.should == Days::User.all
+        expect(users).to eq(Days::User.all)
       end
     end
 
@@ -26,13 +26,13 @@ describe Days::App, type: :controller do
 
       it_behaves_like 'an admin page'
 
-      it { should be_ok }
+      it { is_expected.to be_ok }
 
       it "renders form page" do
-        render[:data].should == :'admin/users/form'
+        expect(render[:data]).to eq(:'admin/users/form')
         user = render[:ivars][:@user]
-        user.should be_a(Days::User)
-        user.should be_new_record
+        expect(user).to be_a(Days::User)
+        expect(user).to be_new_record
       end
     end
 
@@ -49,26 +49,26 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "creates user" do
-        subject.should be_redirect
+        expect(subject).to be_redirect
 
         user = Days::User.last
-        user.name.should == "Writer"
-        user.login_name.should == "writer"
+        expect(user.name).to eq("Writer")
+        expect(user.login_name).to eq("writer")
       end
 
       context "when user is invalid" do
         before do
-          Days::User.any_instance.stub(:valid? => false, :save => false)
+          allow_any_instance_of(Days::User).to receive_messages(:valid? => false, :save => false)
         end
 
-        specify { subject.status.should == 406 } # not acceptable
+        specify { expect(subject.status).to eq(406) } # not acceptable
 
         it "renders form" do
-          render[:data].should == :'admin/users/form'
+          expect(render[:data]).to eq(:'admin/users/form')
           iuser = render[:ivars][:@user]
-          iuser.should be_a_new_record
-          iuser.name.should == 'Writer'
-          iuser.login_name.should == 'writer'
+          expect(iuser).to be_a_new_record
+          expect(iuser.name).to eq('Writer')
+          expect(iuser.login_name).to eq('writer')
         end
       end
     end
@@ -79,15 +79,15 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "renders form page" do
-        render[:data].should == :'admin/users/form'
-        render[:ivars][:@user].should == user
+        expect(render[:data]).to eq(:'admin/users/form')
+        expect(render[:ivars][:@user]).to eq(user)
       end
 
       context "with invalid user" do
         let(:user2) { Days::User.create!(login_name: 'blogger2', name: 'blogger2', password: 'x', password_confirmation: 'x') }
         before { login(user2); user.destroy }
 
-        it { should be_not_found }
+        it { is_expected.to be_not_found }
       end
     end
 
@@ -100,23 +100,23 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "updates user" do
-        subject.should be_redirect
-        URI.parse(subject['Location']).path.should == path
+        expect(subject).to be_redirect
+        expect(URI.parse(subject['Location']).path).to eq(path)
 
         user.reload
-        user.name.should == 'Newbie'
+        expect(user.name).to eq('Newbie')
       end
 
       context "when invalid" do
         before do
-          Days::User.any_instance.stub(:valid? => false, :save => false)
+          allow_any_instance_of(Days::User).to receive_messages(:valid? => false, :save => false)
         end
 
         it "renders form" do
-          render[:data].should == :'admin/users/form'
+          expect(render[:data]).to eq(:'admin/users/form')
           iuser = render[:ivars][:@user]
-          iuser.id.should == user.id
-          iuser.name.should == 'Newbie'
+          expect(iuser.id).to eq(user.id)
+          expect(iuser.name).to eq('Newbie')
         end
       end
 
@@ -124,7 +124,7 @@ describe Days::App, type: :controller do
         let(:user2) { Days::User.create!(login_name: 'blogger2', name: 'blogger2', password: 'x', password_confirmation: 'x') }
         before { login(user2); user.destroy }
 
-        it { should be_not_found }
+        it { is_expected.to be_not_found }
       end
     end
 
@@ -136,10 +136,10 @@ describe Days::App, type: :controller do
 
       it "destroys user" do
         expect { subject }.to change { Days::User.count }.by(-1)
-        Days::User.where(id: another_user.id).count.should be_zero
+        expect(Days::User.where(id: another_user.id).count).to be_zero
 
-        subject.should be_redirect
-        URI.parse(subject.location).path.should == "/admin/users"
+        expect(subject).to be_redirect
+        expect(URI.parse(subject.location).path).to eq("/admin/users")
       end
 
       context "when tried to delete myself" do
@@ -148,14 +148,14 @@ describe Days::App, type: :controller do
         it "doesn't destroy" do
           expect { subject }.to_not change { Days::User.count }
 
-          subject.status.should == 400
+          expect(subject.status).to eq(400)
         end
       end
 
       context "with invalid user" do
         before { another_user.destroy }
 
-        it { should be_not_found }
+        it { is_expected.to be_not_found }
       end
     end
   end

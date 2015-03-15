@@ -22,7 +22,7 @@ describe Days::App, type: :controller do
       subject { get '/admin/login' }
 
       it "renders login page" do
-        render[:data].should == :'admin/login'
+        expect(render[:data]).to eq(:'admin/login')
       end
     end
 
@@ -36,15 +36,15 @@ describe Days::App, type: :controller do
       end
 
       it "redirects to /admin" do
-        subject.should be_redirect
-        URI.parse(subject.location).path.should == '/admin'
+        expect(subject).to be_redirect
+        expect(URI.parse(subject.location).path).to eq('/admin')
       end
 
       context "without login name" do
         let(:params) { {password: 'password'} }
 
         specify do
-          subject.status.should == 400
+          expect(subject.status).to eq(400)
         end
       end
 
@@ -52,7 +52,7 @@ describe Days::App, type: :controller do
         let(:params) { {login_name: 'blogger'} }
 
         specify do
-          subject.status.should == 400
+          expect(subject.status).to eq(400)
         end
       end
 
@@ -61,12 +61,12 @@ describe Days::App, type: :controller do
 
         it "doesn't log in" do
           subject
-          session[:user_id].should be_nil
+          expect(session[:user_id]).to be_nil
         end
 
         it "returns login page" do
-          subject.status.should == 401
-          render[:data].should == :'admin/login'
+          expect(subject.status).to eq(401)
+          expect(render[:data]).to eq(:'admin/login')
         end
       end
 
@@ -75,12 +75,12 @@ describe Days::App, type: :controller do
 
         it "doesn't log in" do
           subject
-          session[:user_id].should be_nil
+          expect(session[:user_id]).to be_nil
         end
 
         it "returns login page" do
-          subject.status.should == 401
-          render[:data].should == :'admin/login'
+          expect(subject.status).to eq(401)
+          expect(render[:data]).to eq(:'admin/login')
         end
       end
     end
@@ -91,8 +91,8 @@ describe Days::App, type: :controller do
         before { login(user) }
 
         it "redirects to /admin/login" do
-          subject.should be_redirect
-          URI.parse(subject.location).path.should == '/admin/login'
+          expect(subject).to be_redirect
+          expect(URI.parse(subject.location).path).to eq('/admin/login')
         end
 
         specify do
@@ -102,8 +102,8 @@ describe Days::App, type: :controller do
 
       context "when not logged in" do
         it "redirects to /admin/login" do
-          subject.should be_redirect
-          URI.parse(subject.location).path.should == '/admin/login'
+          expect(subject).to be_redirect
+          expect(URI.parse(subject.location).path).to eq('/admin/login')
         end
       end
     end

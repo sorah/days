@@ -12,13 +12,13 @@ describe Days::App, type: :controller do
 
       it_behaves_like 'an admin page'
 
-      it { should be_ok }
+      it { is_expected.to be_ok }
 
       it "lists up entries" do
-        render[:data].should == :'admin/entries/index'
+        expect(render[:data]).to eq(:'admin/entries/index')
 
         entries = render[:ivars][:@entries]
-        entries.should == Days::Entry.order('id DESC').all
+        expect(entries).to eq(Days::Entry.order('id DESC').all)
       end
     end
 
@@ -27,13 +27,13 @@ describe Days::App, type: :controller do
 
       it_behaves_like 'an admin page'
 
-      it { should be_ok }
+      it { is_expected.to be_ok }
 
       it "renders form page" do
-        render[:data].should == :'admin/entries/form'
+        expect(render[:data]).to eq(:'admin/entries/form')
         entry = render[:ivars][:@entry]
-        entry.should be_a(Days::Entry)
-        entry.should be_new_record
+        expect(entry).to be_a(Days::Entry)
+        expect(entry).to be_new_record
       end
     end
 
@@ -46,27 +46,27 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "creates entry" do
-        subject.should be_redirect
+        expect(subject).to be_redirect
 
         entry = Days::Entry.last
-        entry.title.should == "Hello"
-        entry.body.should == "World"
-        entry.user.should == user
+        expect(entry.title).to eq("Hello")
+        expect(entry.body).to eq("World")
+        expect(entry.user).to eq(user)
       end
 
       context "when entry is invalid" do
         before do
-          Days::Entry.any_instance.stub(:valid? => false, :save => false)
+          allow_any_instance_of(Days::Entry).to receive_messages(:valid? => false, :save => false)
         end
 
-        specify { subject.status.should == 406 } # not acceptable
+        specify { expect(subject.status).to eq(406) } # not acceptable
 
         it "renders form" do
-          render[:data].should == :'admin/entries/form'
+          expect(render[:data]).to eq(:'admin/entries/form')
           ientry = render[:ivars][:@entry]
-          ientry.should be_a_new_record
-          ientry.title.should == 'Hello'
-          ientry.body.should == 'World'
+          expect(ientry).to be_a_new_record
+          expect(ientry.title).to eq('Hello')
+          expect(ientry.body).to eq('World')
         end
       end
 
@@ -79,12 +79,12 @@ describe Days::App, type: :controller do
           {entry: entry_params.merge(categories: categories)}
         end
 
-        it { should be_redirect }
+        it { is_expected.to be_redirect }
 
         it "creates entry with categories" do
           subject
           entry = Days::Entry.last
-          entry.categories.reload.map(&:id).should == Days::Category.pluck(:id)
+          expect(entry.categories.reload.map(&:id)).to eq(Days::Category.pluck(:id))
         end
       end
     end
@@ -95,14 +95,14 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "renders form page" do
-        render[:data].should == :'admin/entries/form'
-        render[:ivars][:@entry].should == entry
+        expect(render[:data]).to eq(:'admin/entries/form')
+        expect(render[:ivars][:@entry]).to eq(entry)
       end
 
       context "with invalid entry" do
         before { entry.destroy }
 
-        it { should be_not_found }
+        it { is_expected.to be_not_found }
       end
     end
 
@@ -115,27 +115,27 @@ describe Days::App, type: :controller do
       it_behaves_like 'an admin page'
 
       it "updates entry" do
-        subject.should be_redirect
-        URI.parse(subject['Location']).path.should == path
+        expect(subject).to be_redirect
+        expect(URI.parse(subject['Location']).path).to eq(path)
 
         entry.reload
-        entry.title.should == 'New'
-        entry.body.should == 'foo'
+        expect(entry.title).to eq('New')
+        expect(entry.body).to eq('foo')
       end
 
       context "when invalid" do
         before do
-          Days::Entry.any_instance.stub(:valid? => false, :save => false)
+          allow_any_instance_of(Days::Entry).to receive_messages(:valid? => false, :save => false)
         end
 
         it "renders form" do
-          render[:data].should == :'admin/entries/form'
+          expect(render[:data]).to eq(:'admin/entries/form')
           ientry = render[:ivars][:@entry]
-          ientry.id.should == entry.id
-          ientry.title.should == 'New'
+          expect(ientry.id).to eq(entry.id)
+          expect(ientry.title).to eq('New')
 
           entry.reload
-          entry.title.should == 'foo'
+          expect(entry.title).to eq('foo')
         end
       end
 
@@ -146,15 +146,15 @@ describe Days::App, type: :controller do
         end
 
         it "creates entry with categories" do
-          subject.should be_redirect
-          entry.reload.categories.reload.map(&:id).should == [category.id]
+          expect(subject).to be_redirect
+          expect(entry.reload.categories.reload.map(&:id)).to eq([category.id])
         end
       end
 
       context "with invalid entry" do
         before { entry.destroy }
 
-        it { should be_not_found }
+        it { is_expected.to be_not_found }
       end
     end
 
@@ -165,14 +165,14 @@ describe Days::App, type: :controller do
 
       it "destroys entry" do
         expect { subject }.to change { Days::Entry.where(id: entry.id).count }.from(1).to(0)
-        subject.should be_redirect
-        URI.parse(subject.location).path.should == "/admin/entries"
+        expect(subject).to be_redirect
+        expect(URI.parse(subject.location).path).to eq("/admin/entries")
       end
 
       context "with invalid entry" do
         before { entry.destroy }
 
-        it { should be_not_found }
+        it { is_expected.to be_not_found }
       end
     end
 
