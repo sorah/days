@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "settingslogic", '~> 2.0.9'
 
   gem.add_dependency "sprockets", '~> 2.12.3'
-  gem.add_dependency "fast_haml", '>= 0.1.8'
+  gem.add_dependency "faml", '>= 0.2.0'
   gem.add_dependency "sass", '~> 3.2.5'
 
   gem.add_dependency "redcarpet", '~> 2.2.2'
