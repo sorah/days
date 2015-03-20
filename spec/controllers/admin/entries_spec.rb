@@ -3,11 +3,20 @@ require 'spec_helper'
 describe Days::App, type: :controller do
   describe "admin: entries" do
     let!(:entry) { Days::Entry.create!(title: 'foo', body: 'foo') }
+    let!(:draft) { Days::Entry.create!(title: 'draft', body: 'foo', draft: true) }
+    let!(:scheduled) { Days::Entry.create!(title: 'scheduled', body: 'foo', published_at: Time.now + (86400 * 365)) }
     let(:user)  { Days::User.create!(login_name: 'blogger', name: 'blogger', password: 'x', password_confirmation: 'x') }
 
     before { login(user) }
 
     describe "GET /admin/entries" do
+      let(:now) { Time.now }
+
+      before do
+        # fix the time to fix time in SQL statement (might have difference in microsec)
+        allow(Time).to receive(:now).and_return(now)
+      end
+
       subject { get '/admin/entries', {}, env }
 
       it_behaves_like 'an admin page'
@@ -29,6 +38,39 @@ describe Days::App, type: :controller do
 
           entries = render[:ivars][:@entries]
           expect(entries).to eq(Days::Entry.order(id: :desc).page(2))
+        end
+      end
+
+      describe "with draft=1" do
+        subject { get '/admin/entries?draft=1', {}, env }
+
+        it "lists up drafts" do
+          expect(render[:data]).to eq(:'admin/entries/index')
+
+          entries = render[:ivars][:@entries]
+          expect(entries).to eq(Days::Entry.order(id: :desc).draft.page(nil))
+        end
+      end
+
+      describe "with scheduled=1" do
+        subject { get '/admin/entries?scheduled=1', {}, env }
+
+        it "lists up scheduled entries" do
+          expect(render[:data]).to eq(:'admin/entries/index')
+
+          entries = render[:ivars][:@entries]
+          expect(entries).to eq(Days::Entry.order(id: :desc).scheduled.page(1))
+        end
+      end
+
+      describe "with published=1" do
+        subject { get '/admin/entries?published=1', {}, env }
+
+        it "lists up published entries" do
+          expect(render[:data]).to eq(:'admin/entries/index')
+
+          entries = render[:ivars][:@entries]
+          expect(entries).to eq(Days::Entry.order(id: :desc).published.page(nil))
         end
       end
     end

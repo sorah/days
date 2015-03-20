@@ -18,6 +18,16 @@ module Days
       order('published_at DESC')
     end
 
+    scope :draft, -> do
+      where(published_at: nil)
+    end
+
+    scope :scheduled, -> do
+      includes(:categories).
+      where('published_at IS NOT NULL AND published_at >= ?', Time.now).
+      order('published_at DESC')
+    end
+
     paginates_per 12
 
     def draft=(x)

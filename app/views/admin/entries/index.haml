@@ -3,8 +3,14 @@
     %h1 Entries
 
   .row
-    %nav
+    .col-md-7
       %a.btn.btn-primary{href: '/admin/entries/new'} New Entry
+    .col-md-5
+      .btn-group.btn-group-justified{role: 'toolbar'}
+        %a.btn.btn-default{href: '/admin/entries'} All
+        %a.btn.btn-default{class: params[:published] && :active, href: '/admin/entries?published=1'} Published
+        %a.btn.btn-default{class: params[:scheduled] && :active, href: '/admin/entries?scheduled=1'} Scheduled
+        %a.btn.btn-default{class: params[:draft] && :active,href: '/admin/entries?draft=1'} Draft
 
   .row
     %table.table.table-hover.table-vertical-aligned

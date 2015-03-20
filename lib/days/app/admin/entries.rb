@@ -1,7 +1,11 @@
 module Days
   class App < Sinatra::Base
     get "/admin/entries", :admin_only => true do
-      @entries = Entry.order(id: :desc).page(params[:page] || 1)
+      @entries = Entry.order(id: :desc)
+      @entries = @entries.draft if params[:draft] && !params[:draft].empty?
+      @entries = @entries.scheduled if params[:scheduled] && !params[:scheduled].empty?
+      @entries = @entries.published if params[:published] && !params[:published].empty?
+      @entries = @entries.page(params[:page] || 1)
       haml :'admin/entries/index', layout: :admin
     end
 
