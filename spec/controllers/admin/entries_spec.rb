@@ -20,6 +20,17 @@ describe Days::App, type: :controller do
         entries = render[:ivars][:@entries]
         expect(entries).to eq(Days::Entry.order(id: :desc).page(nil))
       end
+
+      describe "with page" do
+        subject { get '/admin/entries?page=2', {}, env }
+
+        it "lists up entries for specified page" do
+          expect(render[:data]).to eq(:'admin/entries/index')
+
+          entries = render[:ivars][:@entries]
+          expect(entries).to eq(Days::Entry.order(id: :desc).page(2))
+        end
+      end
     end
 
     describe "GET /admin/entries/new" do
