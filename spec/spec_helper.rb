@@ -9,6 +9,7 @@ require 'rack/test'
 require 'pry'
 
 Days::App.set :environment, :test
+Days::App.set :raise_errors, true
 
 module AppSpecHelper
   include Rack::Test::Methods

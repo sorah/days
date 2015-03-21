@@ -123,6 +123,35 @@ describe Days::App, type: :controller do
         end
       end
 
+      context "with config.html_pipeline" do
+        let(:pipeline) do
+          double('pipeline')
+        end
+
+        let(:entry) do
+          Days::Entry.new(entry_params)
+        end
+
+        before do
+          Days::App.config.html_pipeline = pipeline
+          allow(Days::Entry).to receive(:new).and_return(entry)
+        end
+
+        it "sets pipeline to entry" do
+          allow(entry).to receive(:save).and_wrap_original do |m, *args|
+            expect(entry.pipeline).to eq(pipeline)
+            entry.pipeline = nil
+            m.call
+          end
+
+          expect(subject).to be_redirect
+        end
+
+        after do
+          Days::App.config.html_pipeline = nil
+        end
+      end
+
       context "with category" do
         let(:categories) do
           Hash[Days::Category.pluck(:id).map{ |_| [_, '1'] }]
@@ -208,6 +237,31 @@ describe Days::App, type: :controller do
         before { entry.destroy }
 
         it { is_expected.to be_not_found }
+      end
+
+      context "with config.html_pipeline" do
+        let(:pipeline) do
+          double('pipeline')
+        end
+
+        before do
+          Days::App.config.html_pipeline = pipeline
+          expect(Days::Entry).to receive(:find_by).with(id: entry.id.to_s).and_return(entry)
+        end
+
+        it "sets pipeline to entry" do
+          allow(entry).to receive(:save).and_wrap_original do |m, *args|
+            expect(entry.pipeline).to eq(pipeline)
+            entry.pipeline = nil
+            m.call
+          end
+
+          expect(subject).to be_redirect
+        end
+
+        after do
+          Days::App.config.html_pipeline = nil
+        end
       end
     end
 

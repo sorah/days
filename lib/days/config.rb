@@ -1,5 +1,6 @@
 require_relative 'app'
 require 'days/models/base'
+require 'html/pipeline'
 require 'logger'
 require 'settingslogic'
 
@@ -32,6 +33,8 @@ module Days
         end
       end
     end
+
+    attr_accessor :html_pipeline
 
     def run_scripts
       (self[:scripts] || []).each do |_|
