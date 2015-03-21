@@ -55,6 +55,21 @@ module Days
       self.rendered.gsub(/<!-- *more *-->.+\z/m, block_given? ? yield(self) : '')
     end
 
+    def body=(*)
+      @need_rendering = true
+      super
+    end
+
+    def render!
+      @need_rendering = false
+      markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML,
+        :autolink => true, :space_after_headers => true,
+        :no_intra_emphasis => true, :fenced_code_blocks => true,
+        :tables => true, :superscript => true)
+      self.rendered = markdown.render(self.body)
+      nil
+    end
+
     before_validation do
       if draft?
         self.published_at = nil
@@ -65,11 +80,8 @@ module Days
       if self.title && (!self.slug || self.slug.empty?)
         self.slug = self.title.to_url
       end
-      markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML,
-        :autolink => true, :space_after_headers => true,
-        :no_intra_emphasis => true, :fenced_code_blocks => true,
-        :tables => true, :superscript => true)
-      self.rendered = markdown.render(self.body)
+
+      self.render! if @need_rendering
     end
   end
 end
