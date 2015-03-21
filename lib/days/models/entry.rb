@@ -1,6 +1,6 @@
 require 'days/models/base'
+require 'html/pipeline'
 require 'stringex'
-require 'redcarpet'
 
 module Days
   class Entry < Days::Models::Base
@@ -60,13 +60,24 @@ module Days
       super
     end
 
-    def render!
+    def self.default_pipeline
+      HTML::Pipeline.new([
+        HTML::Pipeline::MarkdownFilter,
+      ])
+    end
+
+    def pipeline=(other)
+      @pipeline = other
+    end
+
+    def pipeline
+      @pipeline ||= self.class.default_pipeline
+    end
+
+    def render!(pipeline: self.pipeline)
+      result = pipeline.call(self.body)
+      self.rendered = result[:output].to_s
       @need_rendering = false
-      markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML,
-        :autolink => true, :space_after_headers => true,
-        :no_intra_emphasis => true, :fenced_code_blocks => true,
-        :tables => true, :superscript => true)
-      self.rendered = markdown.render(self.body)
       nil
     end
 

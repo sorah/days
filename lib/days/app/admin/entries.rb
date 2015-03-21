@@ -26,6 +26,7 @@ module Days
 
         @entry = Entry.new(entry)
         @entry.user = current_user
+        @entry.pipeline = config.html_pipeline if config.html_pipeline
 
         if @entry.save
           redirect "/admin/entries/#{@entry.id}" # FIXME: Permalink
@@ -48,11 +49,12 @@ module Days
     put "/admin/entries/:id", :admin_only => true do
       entry = params[:entry] || halt(400)
       @entry = Entry.find_by(id: params[:id]) || halt(404)
+      @entry.pipeline = config.html_pipeline if config.html_pipeline
 
       entry[:categories] = Category.where(
         id: (entry[:categories] || {}).keys.map(&:to_i)
       )
-      @entry.update_attributes(entry)
+      @entry.assign_attributes(entry)
 
       if @entry.save
         redirect "/admin/entries/#{@entry.id}"

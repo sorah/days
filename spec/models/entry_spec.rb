@@ -5,21 +5,99 @@ describe Days::Entry do
     described_class.new(title: 'title', body: 'a')
   end
 
+  describe "#render!" do
+    def generate_pipeline(rendered_text)
+      double("pipeline(#{rendered_text.inspect})").tap do |d|
+        allow(d).to receive(:call) do |text|
+          expect(text).to eq 'text'
+          {output: rendered_text}
+        end
+      end
+    end
 
-  describe "rendering" do
+    let(:pipeline) do
+
+    end
+
+    subject do
+      described_class.new(title: 'title', body: 'text')
+    end
+
+    before do
+      allow(described_class).to receive(:default_pipeline).and_return(generate_pipeline('default'))
+    end
+
+    context "without pipeline, @pipeline" do
+      it "uses default_pipeline" do
+        expect {
+          subject.render!
+        }.to change {
+          subject.rendered
+        }.from(nil).to('default')
+      end
+    end
+
+    context "with @pipeline" do
+      before do
+        subject.pipeline = generate_pipeline('instance')
+      end
+
+      it "uses @pipeline" do
+        expect {
+          subject.render!
+        }.to change {
+          subject.rendered
+        }.from(nil).to('instance')
+      end
+    end
+
+    context "with pipeline" do
+      it "uses passed argument" do
+        expect {
+          subject.render!(pipeline: generate_pipeline('arg'))
+        }.to change {
+          subject.rendered
+        }.from(nil).to('arg')
+      end
+    end
+  end
+
+  describe "auto-rendering" do
     subject do
       described_class.new(title: 'title', body: 'a')
     end
 
     before do
-      allow_any_instance_of(Redcarpet::Markdown).to receive_messages(render: "(sun)")
-      subject.save
+      allow(subject).to receive(:render!) do
+        subject.rendered = 'rendered'
+      end
     end
 
-    it { is_expected.to be_valid }
+    context "normal" do
+      before do
+        subject.save
+      end
 
-    specify do
-      expect(subject.rendered).to eq("(sun)")
+      it { is_expected.to be_valid }
+
+      specify do
+        expect(subject.rendered).to eq('rendered')
+      end
+    end
+
+    context "modified body" do
+      before do
+        subject.save!
+        subject.rendered = ''
+        subject.body = 'b'
+        subject.save
+      end
+
+      it { is_expected.to be_valid }
+
+      specify do
+        expect(subject.rendered).to eq('rendered')
+      end
     end
   end
 
