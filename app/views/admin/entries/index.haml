@@ -7,10 +7,14 @@
       %a.btn.btn-primary{href: '/admin/entries/new'} New Entry
     .col-md-5
       .btn-group.btn-group-justified{role: 'toolbar'}
-        %a.btn.btn-default{href: '/admin/entries'} All
-        %a.btn.btn-default{class: params[:published] && :active, href: '/admin/entries?published=1'} Published
-        %a.btn.btn-default{class: params[:scheduled] && :active, href: '/admin/entries?scheduled=1'} Scheduled
-        %a.btn.btn-default{class: params[:draft] && :active,href: '/admin/entries?draft=1'} Draft
+        %a.btn.btn-default{href: '/admin/entries'}
+          All
+        %a.btn.btn-default{class: params[:published] && :active, href: '/admin/entries?published=1'}
+          Published (#{Days::Entry.published.count})
+        %a.btn.btn-default{class: params[:scheduled] && :active, href: '/admin/entries?scheduled=1'}
+          Scheduled (#{Days::Entry.scheduled.count})
+        %a.btn.btn-default{class: params[:draft] && :active,href: '/admin/entries?draft=1'}
+          Draft (#{Days::Entry.draft.count})
 
   .row
     %table.table.table-hover.table-vertical-aligned
