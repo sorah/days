@@ -1,14 +1,6 @@
 require 'spec_helper'
 
 describe Days::Entry do
-  before do
-    described_class.destroy_all
-  end
-
-  after do
-    described_class.destroy_all
-  end
-
   subject do
     described_class.new(title: 'title', body: 'a')
   end

@@ -2,20 +2,11 @@ require 'spec_helper'
 
 describe Days::App, type: :controller do
   describe "admin: sessions" do
-    let(:user) do
+    let!(:user) do
       Days::User.create(
         name: 'Blogger', login_name: 'blogger',
         password: 'password', password_confirmation: 'password'
       )
-    end
-
-    before do
-      Days::User.destroy_all
-      user
-    end
-
-    after do
-      user.destroy
     end
 
     describe "GET /admin/login" do

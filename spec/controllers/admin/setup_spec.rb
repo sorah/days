@@ -23,10 +23,6 @@ describe Days::App, type: :controller do
       it_behaves_like 'an setup page'
 
       context "when user not exists" do
-        before do
-          Days::User.destroy_all
-        end
-
         it { is_expected.to be_ok }
 
         it "renders form page" do
@@ -48,10 +44,6 @@ describe Days::App, type: :controller do
       it_behaves_like 'an setup page'
 
       context "when user not exists" do
-        before do
-          Days::User.destroy_all
-        end
-
         it "creates user" do
           expect { subject }.to change { Days::User.count }.from(0).to(1)
           user = Days::User.last
