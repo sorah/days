@@ -1,6 +1,7 @@
 .container
   .row
-    %h1 Entries
+    .col-md-12
+      %h1 Entries
 
   .row
     .col-md-7
@@ -17,30 +18,32 @@
           Draft (#{Days::Entry.draft.count})
 
   .row
-    %table.table.table-hover.table-vertical-aligned
-      %thead
-        %tr
-          %th Title
-          %th Published at
-          %th Actions
-      %tbody
-        - @entries.each do |entry|
+    .col-md-12
+      %table.table.table-hover.table-vertical-aligned
+        %thead
           %tr
-            %td{style: 'width: 60%'}
-              %a{href: "/admin/entries/#{entry.id}"}= entry.title
-            %td
-              - if entry.published_at
-                = entry.published_at
-              - else
-                %span.label.label-info Draft
-              - if entry.scheduled?
-                %span.label.label-success Scheduled
-            %td
-              %a.btn.btn-default.btn-small{href: "/admin/entries/#{entry.id}"} Edit
-              %a.btn.btn-default.btn-small{href: entry_path(entry), class: entry.published? ? '' : 'disabled'} Show
-              %form.form-inline.inlm{action: "/admin/entries/#{entry.id}", method: "POST", onsubmit: 'javascript:return confirm("Are you sure?")'}
-                != csrf_tag
-                %input{type: 'hidden', name: '_method', value: 'DELETE'}
-                %button.btn.btn-small.btn-danger{type: 'submit'} Delete
+            %th Title
+            %th Published at
+            %th Actions
+        %tbody
+          - @entries.each do |entry|
+            %tr
+              %td{style: 'width: 60%'}
+                %a{href: "/admin/entries/#{entry.id}"}= entry.title
+              %td
+                - if entry.published_at
+                  = entry.published_at
+                - else
+                  %span.label.label-info Draft
+                - if entry.scheduled?
+                  %span.label.label-success Scheduled
+              %td
+                %a.btn.btn-default.btn-small{href: "/admin/entries/#{entry.id}"} Edit
+                %a.btn.btn-default.btn-small{href: entry_path(entry), class: entry.published? ? '' : 'disabled'} Show
+                %form.form-inline.inlm{action: "/admin/entries/#{entry.id}", method: "POST", onsubmit: 'javascript:return confirm("Are you sure?")'}
+                  != csrf_tag
+                  %input{type: 'hidden', name: '_method', value: 'DELETE'}
+                  %button.btn.btn-small.btn-danger{type: 'submit'} Delete
   .row
-    != paginate @entries
+    .col-md-12
+      != paginate @entries
