@@ -50,15 +50,15 @@ module Days
       haml :entries
     end
 
-    private def generate_atom_feed(entries)
+    private def generate_atom_feed(entries, title: config.title, html_path: '/feed')
       xml = Builder::XmlMarkup.new
       xml.instruct!
       xml.feed("xmlns" => 'http://www.w3.org/2005/Atom') do
         xml.id("tag:#{request.host},2005:#{request.fullpath.split(".")[0]}")
 
-        xml.link(:rel => 'alternate', :type => 'text/html', :href => request.url.gsub(/feed$/,''))
+        xml.link(:rel => 'alternate', :type => 'text/html', :href => [request.base_url, config.base_path, html_path].join.gsub(%r{//}, '/'))
         xml.link(:rel => 'self', :type => 'application/atom+xml', :href => request.url)
-        xml.title config.title
+        xml.title title
 
         xml.updated(entries.map(&:updated_at).max)
 
@@ -69,11 +69,11 @@ module Days
             xml.published entry.published_at.xmlschema
             xml.updated entry.updated_at.xmlschema
 
-            xml.link(rel: 'alternate', type: 'text/html', href: "#{request.url.gsub(/\/feed$/,'')}#{entry_path(entry)}")
-
             xml.title entry.title
 
-            xml.content(entry.short_rendered { '... <a href="'+entry_path(entry)+'">Continue Reading</a>' }, type: 'html')
+            href = [request.base_url, config.base_path, entry_path(entry)].join.gsub(%r{//}, '/')
+            xml.link(rel: 'alternate', type: 'text/html', href: href)
+            xml.content(entry.short_rendered { '... <a href="'+href+'">Continue Reading</a>' }, type: 'html')
           end
         end
       end
@@ -91,7 +91,7 @@ module Days
       entries = category.entries.published.page(params[:page])
 
       content_type 'application/atom+xml'
-      generate_atom_feed(entries)
+      generate_atom_feed(entries, title: "#{config.title} (Category: #{category.name})", html_path: "/category/#{category.name}")
     end
 
   end
