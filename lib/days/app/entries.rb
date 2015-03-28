@@ -50,14 +50,9 @@ module Days
       haml :entries
     end
 
-    get '/feed' do
-      content_type 'application/atom+xml'
-      entries = Entry.published.page(params[:page])
-
+    private def generate_atom_feed(entries)
       xml = Builder::XmlMarkup.new
-
       xml.instruct!
-
       xml.feed("xmlns" => 'http://www.w3.org/2005/Atom') do
         xml.id("tag:#{request.host},2005:#{request.fullpath.split(".")[0]}")
 
@@ -83,5 +78,21 @@ module Days
         end
       end
     end
+
+    get '/feed' do
+      entries = Entry.published.page(params[:page])
+
+      content_type 'application/atom+xml'
+      generate_atom_feed(entries)
+    end
+
+    get '/feed/category/:name' do
+      category = Category.find_by(name: params[:name]) || halt(404)
+      entries = category.entries.published.page(params[:page])
+
+      content_type 'application/atom+xml'
+      generate_atom_feed(entries)
+    end
+
   end
 end

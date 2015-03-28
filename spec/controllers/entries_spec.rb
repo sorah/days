@@ -169,4 +169,15 @@ describe Days::App, type: :controller do
       expect(subject.content_type).to eq('application/atom+xml')
     end
   end
+
+  describe "GET /feed/category/:name" do
+    let!(:category) { Days::Category.create!(name: 'cat') }
+    subject { get '/feed/category/cat' }
+
+    it { is_expected.to be_ok }
+
+    specify do
+      expect(subject.content_type).to eq('application/atom+xml')
+    end
+  end
 end
