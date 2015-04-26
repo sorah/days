@@ -37,6 +37,8 @@ module Days
     attr_accessor :html_pipeline
 
     def run_scripts
+      instance_eval (self[:script_lines] || []).join("\n")
+
       (self[:scripts] || []).each do |_|
         path = File.expand_path(_, self[:root])
         instance_eval File.read(path), path, 1
