@@ -6,7 +6,7 @@ require 'days/version'
 Gem::Specification.new do |gem|
   gem.name          = "days"
   gem.version       = Days::VERSION
-  gem.authors       = ["Shota Fukumori (sora_h)"]
+  gem.authors       = ["Sorah Fukumori"]
   gem.email         = ["her@sorah.jp"]
   gem.description   = %q{Simple blog system built up with Sinatra.}
   gem.summary       = %q{Simple blog system built up with Sinatra.}
@@ -18,13 +18,13 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "sinatra", '>= 1.4.5'
-  gem.add_dependency "thor", '~> 0.16.0'
-  gem.add_dependency "rack_csrf", '~> 2.5.0'
+  gem.add_dependency "thor"
+  gem.add_dependency "rack_csrf"
 
   gem.add_dependency "settingslogic", '~> 2.0.9'
 
   gem.add_dependency "sprockets", '~> 2.12.3'
-  gem.add_dependency "faml", '>= 0.2.4'
+  gem.add_dependency "faml"
   gem.add_dependency "sass", '~> 3.2.5'
 
   gem.add_dependency "builder", '~> 3.1'
