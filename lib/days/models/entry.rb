@@ -63,7 +63,7 @@ module Days
     def self.default_pipeline
       HTML::Pipeline.new([
         HTML::Pipeline::MarkdownFilter,
-      ], unsafe: true)
+      ], unsafe: true, commonmarker_extensions:  %i[table strikethrough autolink])
     end
 
     def pipeline=(other)
