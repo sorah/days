@@ -63,7 +63,7 @@ module Days
     def self.default_pipeline
       HTML::Pipeline.new([
         HTML::Pipeline::MarkdownFilter,
-      ])
+      ], unsafe: true)
     end
 
     def pipeline=(other)

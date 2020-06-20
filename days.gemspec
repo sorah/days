@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "settingslogic", '~> 2.0.9'
 
   gem.add_dependency "sprockets", '~> 2.12.3'
-  gem.add_dependency "faml"
+  gem.add_dependency "haml"
   gem.add_dependency "sass", '~> 3.2.5'
 
   gem.add_dependency "builder", '~> 3.1'
