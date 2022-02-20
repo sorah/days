@@ -79,6 +79,13 @@ module Days
       end
     end
 
+    alias glob_templates_orig glob_templates
+    def glob_templates(views_path, template_path)
+      views_path2 = File.expand_path(::File.join(settings.config.root, "views"))
+      glob_templates_orig(views_path2, template_path) \
+        + glob_templates_orig(views_path, template_path)
+    end
+
     alias find_template_orig find_template
     def find_template(views, name, engine, &block)
       app_views = File.expand_path(settings.config['views'] || ::File.join(settings.config.root, "views"))
