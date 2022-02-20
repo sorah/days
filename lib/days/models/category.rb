@@ -2,7 +2,7 @@ require 'days/models/base'
 
 module Days
   class Category < Days::Models::Base
-    attr_accessible :name
+    #attr_accessible :name
 
     validates_presence_of :name
     validates_uniqueness_of :name

@@ -1,6 +1,5 @@
- require 'active_record'
- require 'protected_attributes'
- require 'active_record/mass_assignment_security'
+require 'active_record'
+require 'kaminari/activerecord'
 
 module Days
   module Models

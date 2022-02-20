@@ -35,7 +35,7 @@ module Days
         user.delete :password
       end
 
-      @user.update_attributes(user)
+      @user.assign_attributes(user)
 
       if @user.save
         redirect "/admin/users/#{@user.id}"

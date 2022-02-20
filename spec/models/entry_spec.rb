@@ -288,7 +288,7 @@ describe Days::Entry do
     let(:body) { "a\n\n<!--more-->\n\nb" }
 
     it "deletes after <!--more-->" do
-      expect(subject.short_rendered).to eq("<p>a</p>\n\n")
+      expect(subject.short_rendered).to eq("<p>a</p>\n")
     end
 
     context "without <!--more--> in body" do
@@ -301,7 +301,7 @@ describe Days::Entry do
 
     context "with block" do
       it "replaces by block evaluation result" do
-        expect(subject.short_rendered { "hi!" }).to eq("<p>a</p>\n\nhi!")
+        expect(subject.short_rendered { "hi!" }).to eq("<p>a</p>\nhi!")
       end
     end
   end

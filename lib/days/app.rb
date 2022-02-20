@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'kaminari/sinatra'
 require 'sprockets'
 require 'rack/csrf'
+require 'otr-activerecord/middleware/connection_management'
 require_relative 'config'
 require_relative 'models'
 require_relative 'helpers'
@@ -24,7 +25,7 @@ module Days
     def self.rack
       Rack::Builder.app {
         app = ::Days::App
-        use ActiveRecord::ConnectionAdapters::ConnectionManagement
+        use OTR::ActiveRecord::ConnectionManagement
 
         map '/' do
           if app.environment != 'test'

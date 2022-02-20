@@ -56,7 +56,14 @@ module Days
         raise ActiveRecord::ConnectionNotEstablished if force
         return base.connection
       rescue ActiveRecord::ConnectionNotEstablished
-        base.establish_connection(self['database'] ? Hash[self.database] : ENV["DATABASE_URL"])
+        dbconf = self['database'] ? Hash[self.database] : {url: ENV["DATABASE_URL"]}
+        dbconf.merge!(
+          migrations_paths: [
+            self[:migration_path] || "#{self.root}/db/migrate",
+            File.expand_path(File.join(__dir__, 'migrate')),
+          ],
+        )
+        base.establish_connection(dbconf)
         retry
       end
     end

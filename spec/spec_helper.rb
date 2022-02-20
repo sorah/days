@@ -102,6 +102,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     Days::App.environment = ENV["RACK_ENV"] || :test
+    DatabaseRewinder.database_configuration = { 'test' => config.days_config['database'] }
     config.days_config.establish_db_connection()
     ActiveRecord::Base.configurations = {'test' => Hash[config.days_config.database]}
 

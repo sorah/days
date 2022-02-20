@@ -1,3 +1,4 @@
+
 module Days
   module Migrator
     def self.start(config, options = {})
@@ -11,11 +12,7 @@ module Days
         ActiveRecord::Base.logger = nil unless options[:show_sql]
         ActiveRecord::Migration.verbose = options[:verbose]
 
-        migration_paths = [
-          config[:migration_path] || "#{config.root}/db/migrate",
-          File.expand_path(File.join(__FILE__, '..', 'migrate'))
-        ]
-        ActiveRecord::Migrator.migrate(migration_paths, options[:version]) do |migration|
+        ActiveRecord::Base.connection.migration_context.migrate(options[:version]) do |migration|
           options[:scope].blank? || (options[:scope] == migration.scope)
         end
 

@@ -17,33 +17,34 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency "sinatra", '>= 1.4.5'
+  gem.add_dependency "sinatra", '>= 2.2.0'
   gem.add_dependency "thor"
   gem.add_dependency "rack_csrf"
 
   gem.add_dependency "settingslogic", '~> 2.0.9'
+  gem.add_dependency "psych", '< 4' # safe_load and alias
 
-  gem.add_dependency "sprockets", '~> 2.12.3'
+  gem.add_dependency "sprockets", '~> 4.0.2'
   gem.add_dependency "haml"
-  gem.add_dependency "sass", '~> 3.2.5'
+  gem.add_dependency "sass", '~> 3.7.4'
 
-  gem.add_dependency "builder", '~> 3.1'
+  gem.add_dependency "builder", '~> 3.2.4'
 
-  gem.add_dependency "activerecord", "~> 4.2.0"
-  gem.add_dependency "protected_attributes"
-  gem.add_dependency "kaminari", "~> 0.16.1"
-  gem.add_dependency "padrino-helpers", '~> 0.9.21'
-  gem.add_dependency "stringex", '~> 1.5.1'
-  gem.add_dependency "bcrypt", '~> 3.1.9'
+  gem.add_dependency "activerecord", "~> 7.0.2"
+  gem.add_dependency "otr-activerecord"
+  gem.add_dependency "kaminari", "~> 1.2.2"
+  gem.add_dependency "kaminari-sinatra", "~> 1.0.1"
+  gem.add_dependency "padrino-helpers", '~> 0.15.1'
+  gem.add_dependency "stringex", '~> 2.8.5'
+  gem.add_dependency "bcrypt", '~> 3.1.16'
 
-  gem.add_dependency "html-pipeline", '>= 1.11.0'
-  gem.add_dependency "github-markdown"
+  gem.add_dependency "html-pipeline", '>= 2.14.0'
+  gem.add_dependency "commonmarker"
 
   gem.add_development_dependency "sqlite3"
 
   gem.add_development_dependency "rspec", '~> 3.2.0'
   gem.add_development_dependency "rack-test"
-  gem.add_development_dependency "fuubar"
   gem.add_development_dependency "database_rewinder"
 
   gem.add_dependency "pry"

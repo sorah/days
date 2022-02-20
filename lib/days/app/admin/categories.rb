@@ -22,7 +22,7 @@ module Days
       category = params[:category] || halt(400)
       @category = Category.where(id: params[:id]).first || halt(404)
 
-      @category.update_attributes(category)
+      @category.assign_attributes(category)
 
       if @category.save
         redirect "/admin/categories"
