@@ -10,7 +10,6 @@ require 'sprockets'
 require 'rack/csrf'
 require 'otr-activerecord/middleware/connection_management'
 require 'haml'
-require 'sass'
 
 I18n.load_path.reject! {|_| _.match(/padrino/) }
 

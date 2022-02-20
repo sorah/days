@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "sprockets", '~> 4.0.2'
   gem.add_dependency "haml"
-  gem.add_dependency "sass", '~> 3.7.4'
+  gem.add_dependency "sassc"
 
   gem.add_dependency "builder", '~> 3.2.4'
 
