@@ -1,12 +1,14 @@
+require_relative 'config'
+require_relative 'models'
+require_relative 'helpers'
+
+require 'active_support/isolated_execution_state' # https://github.com/rails/rails/issues/43851
+
 require 'sinatra/base'
 require 'kaminari/sinatra'
 require 'sprockets'
 require 'rack/csrf'
 require 'otr-activerecord/middleware/connection_management'
-require 'active_support/isolated_execution_state' # https://github.com/rails/rails/issues/43851
-require_relative 'config'
-require_relative 'models'
-require_relative 'helpers'
 require 'haml'
 require 'sass'
 
