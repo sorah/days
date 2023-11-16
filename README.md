@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/sorah/days.png?branch=master)](https://travis-ci.org/sorah/days)
 
+__Discontinued.__ Everyone now uses JavaScript ecosystem to build websites, and you may find https://github.com/sorah/kozeki as a static blogging backend.
+
 Days is simple blog system built up with Sinatra.
 
 ## Installation
